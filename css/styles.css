@@ -1,0 +1,288 @@
+*{
+    margin: 0px;
+    font-family: Arial, 'Inter', 'Roboto', sans-serif;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+/* El contenedor principal ocupa toda la latura de la ventana*/
+.container{
+    display: flex;
+    height: 100vh; /*100% la altura viewport*/
+}
+
+.menu{
+    background-color: rgb(250, 250, 250);
+    height: max-content;
+    width: 275px;
+    height: 100%; /*Como esta dentro de un contenedor por el container que abarque el porcentaje de este*/
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+.menu ul{
+    list-style-type: none;
+    padding-left: 13px;
+    margin: 0px;
+    margin-top: 30px;
+}
+
+.menu ul li{
+    margin-bottom: 5px;
+    width: 240px;
+    height: 40px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;     /* centra vertical */
+    padding-left: 5px;
+    font-size: 14px;
+}
+
+.menu ul li:hover{
+    background-color: rgb(204, 204, 204);
+}
+
+#ayuda{
+    margin-top: 296px;
+}
+
+#perfil{
+    margin-top: -15px;
+    margin-bottom: 15px;
+}
+
+#iconoañadirTarea{
+    margin-bottom: 15px;
+}
+
+
+/* El contenido lateral ocupa el resto del espacio */
+
+
+.contenido-lateral {
+  flex: 1; /* ocupa todo el espacio horizontal restante */
+  padding: 20px;
+}
+
+/*Imagen y texto si no hay nada*/
+.bandeja{
+    text-align: center;
+}
+.añadirdeter{
+    background-color: #dadada;
+    padding: 7px;
+    margin-top: 10px;
+    border-radius: 5px;
+    border-color: #dadada;
+}
+
+/*Formulario para nueva tarea*/
+.formulario-tareas {
+    background: white;
+    border-radius: 8px;
+    padding: 10px;
+    width: 900px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0 auto;
+    margin-top: 10px;
+
+}
+
+.grupo-texto input {
+    display: block;
+    width: 95%;
+    border: none;
+    padding: 8px;
+    font-size: 14px;
+    margin-bottom: 5px;
+    outline: none;
+}
+
+.grupo-opciones {
+    display: flex;
+    gap: 8px;
+    margin: 10px 0;
+}
+
+.grupo-opciones button{
+    border: 1px solid #ddd;
+    background: white;
+    padding: 6px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+.grupo-opciones input[type="date"] {
+  border: 1px solid #ddd;
+  background: white;
+  padding: 6px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.grupo-opciones input[type="date"]:hover {
+  border-color: #aaa;
+}
+
+.grupo-final {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+select {
+    border: none;
+    background: transparent;
+    font-size: 14px;
+}
+
+.acciones {
+    display: flex;
+    gap: 8px;
+}
+
+.cancelar {
+    background: #f5f5f5;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.añadir {
+    background: #d3d6da;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+/*Estilos especificos para el formulario flotante de editar tarea*/
+#formulario-tareas-editar {
+    position: fixed;          /* Se queda flotando en la pantalla */
+    top: 50%;                  /* Centrado vertical */
+    left: 60%;                 /* Centrado horizontal */
+    transform: translate(-50%, -50%);
+    z-index: 1000;             /* Encima del resto de elementos */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    width: 1000px;
+}
+
+/* Fondo oscuro para modal */
+#fondoOscuroEditar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 900;
+}
+
+
+/*Clase para ocultar cosas*/
+.oculto{
+    display: none;
+}
+
+/*Estilos de lista de tareas*/
+ul{
+    list-style-type: none;
+    padding: 0px;
+}
+
+.contenedorListaTarea{
+    display: flex;
+    flex-direction: column; /* eje principal vertical */
+    gap: 10px; /* espacio entre elementos */
+    align-items: flex-start; /* alineación horizontal */
+}
+
+.claseTareas{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-radius: 20px;
+    border-bottom: 2px solid #d3d6da;
+}
+
+.claseTareas:hover{
+    background-color: rgb(204, 204, 204);
+}
+
+.divBotones{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.imagenesBotones{
+    width: 25px;
+    height: 25px;
+}
+
+.imagenesBotonesFecha{
+    width: 14px;
+    height: 14px;
+}
+
+.divListaTareas{
+    width: 900px;
+    margin: 0 auto;
+
+}
+
+.fechaTarea{
+    opacity: 0.7;
+    font-size: 13px;
+}
+
+#h1bandejaEntrada{
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+/*Estilo del boton que aparece debajo de la lista de tareas*/
+#añadirtareaoculto{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.imagenytextofecha {
+    display: flex;
+    gap: 4px;
+}
+
+.claseHoy{
+    color: green;
+    opacity: 1;
+    font-size: 13px;
+}
+
+.claseMañana{
+    color: orange;
+    opacity: 1;
+    font-size: 13px;
+
+}
+
+.claseDiaSemana{
+    color: purple;
+    opacity: 1;
+    font-size: 13px;
+
+}
+a {
+  text-decoration: none; /* Quita el subrayado */
+  color: inherit;        /* Hereda el color del contenedor */
+  cursor: pointer;       /* Opcional: mantiene el cursor de puntero */
+}

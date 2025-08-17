@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do App</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!--Menú-->
+    <div class="container">
+        <div class="menu">
+            <nav>
+                <ul>
+                    <li id="perfil"><img src="https://cdn-icons-png.flaticon.com/512/1946/1946429.png" alt=""
+                            style="width: 25px; height: 25px; margin-right: 10px;">Luis</li>
+                    <li id="iconoañadirTarea"><img src="https://cdn-icons-png.flaticon.com/512/15867/15867069.png"
+                            alt="" style="width: 25px; height: 25px; margin-right: 10px;">Añadir tarea</li>
+                    <li><img src="https://cdn-icons-png.flaticon.com/512/2319/2319177.png" alt=""
+                            style="width: 25px; height: 25px; margin-right: 10px; opacity: 0.6;">Buscador</li>
+                    <a href="index.html">
+                        <li><img src="https://cdn-icons-png.flaticon.com/512/736/736175.png " alt=""
+                                style="width: 25px; height: 25px; margin-right: 10px; opacity: 0.6;">Bandeja de entrada
+                        </li>
+                    </a>
+
+                    <li><img src="https://cdn-icons-png.flaticon.com/512/1827/1827444.png" alt=""
+                            style="width: 25px; height: 25px; margin-right: 10px; opacity: 0.6;">Hoy</li>
+                    <li><img src="https://cdn-icons-png.flaticon.com/512/3594/3594034.png" alt=""
+                            style="width: 25px; height: 25px; margin-right: 10px; opacity: 0.6;">Próximo</li>
+                    <li><img src="https://cdn-icons-png.flaticon.com/512/4502/4502383.png" alt=""
+                            style="width: 25px; height: 25px; margin-right: 10px; opacity: 0.6;">Filtros y Etiquetas
+                    </li>
+                    <a href="tareasCompletadas.html">
+                        <li><img src="https://cdn-icons-png.flaticon.com/512/15473/15473204.png" alt=""
+                                style="width: 25px; height: 25px; margin-right: 10px; opacity: 0.6;">Más</li>
+                    </a>
+                    <li id="ayuda"><img src="https://cdn-icons-png.flaticon.com/512/3772/3772046.png " alt=""
+                            style="width: 30px; height: 30px; margin-right: 10px; opacity: 0.6;">Ayuda y Recursos</li>
+                </ul>
+
+            </nav>
+        </div>
+        <div class="contenido-lateral">
+            <!--Parte en que se muestran las tarea completadas-->
+            <div class="divListaTareas">
+                <h1 id="h1bandejaEntrada">Tareas completadas</h1>
+                <ul id="listaTareasCompletadas">
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script src="js/tareasCompletadas.js"></script>
+</body>
+
+</html>
