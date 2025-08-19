@@ -155,3 +155,75 @@ function colorFechaMostrar(textoFecha) {
   }
   return p;
 }
+
+// AÑADIR TAREA DESDE EL MENÚ
+
+const formulatioAñadirTareaMenu = document.getElementById(
+  "formulario-tareas-menu"
+);
+
+formulatioAñadirTareaMenu.classList.add("oculto");
+
+// Capturo el evento del añadirTarea que esta en el menu
+document
+  .getElementById("iconoañadirTarea")
+  .addEventListener("click", function () {
+    formulatioAñadirTareaMenu.classList.remove("oculto");
+  });
+
+// Capturo el evento del boton cancelar del formulario para añadir una nueva tarea desde el menu
+document
+  .getElementById("desaparecerFormularioAñadirTareaMenu")
+  .addEventListener("click", function () {
+    formulatioAñadirTareaMenu.classList.add("oculto");
+    limpiarFormularioNuevaTarea();
+  });
+
+//Función para limpiar los input del formulario de Nueva Tarea del menu
+function limpiarFormularioNuevaTarea() {
+  document.getElementById("nombreTareaMenu").value = "";
+  document.getElementById("descripcionTareaMenu").value = "";
+  document.getElementById("fechaTareaMenu").value = "";
+}
+
+// Obtengo el evento de agregar una nueva tarea que es el boton de añadir pero del formulario que se despliega desde el menú
+document
+  .getElementById("nuevaTareaMenu")
+  .addEventListener("click", agregarNuevaTareaMenu);
+
+// Función para agregar una nueva tarea, recolecta los datos de los input
+// Crear un objeto con los datos recolectados y los agregar al arreglo tareas
+// Por ultimo envia al arreglo al localStorage con la clave "tareas"
+function agregarNuevaTareaMenu(event) {
+  event.preventDefault();
+  // Obtengo el valor del nombre de la tarea
+  const nombreTarea = document.getElementById("nombreTareaMenu").value;
+  // Obtengo el valor de decripción de la tarea
+  const descripcionTarea = document.getElementById(
+    "descripcionTareaMenu"
+  ).value;
+  // Obtengo el valor de la fecha de la tarea
+  const fechaTarea = document.getElementById("fechaTareaMenu").value;
+  // Creando un objeto Tarea con sus valores que requiere
+  const tarea = new Tarea(nombreTarea, descripcionTarea, fechaTarea);
+  // Agrego la nueva tarea(objeto) al arreglo tareas
+  tareas.push(tarea);
+  // Envio el arreglo tareas al localStorage con clave "tareas"
+  localStorage.setItem("tareas", JSON.stringify(tareas));
+  // Llamo a la faunción para limipiar el formulario de Nueva Tarea
+  limpiarFormularioNuevaTarea();
+  //Llamo a la función para desaparecer el formulario
+  formulatioAñadirTareaMenu.classList.add("oculto");
+}
+
+// Clase del objeto tarea
+class Tarea {
+  constructor(name, descripcion, fecha) {
+    this.name = name;
+    this.descripcion = descripcion;
+    this.fecha = fecha;
+  }
+}
+
+// Crea un arreglo tareas con los datos almacenados en la clave "tareas" del localStorage
+var tareas = JSON.parse(localStorage.getItem("tareas")) || [];

@@ -21,7 +21,7 @@
                             alt="" style="width: 25px; height: 25px; margin-right: 10px;">Añadir tarea</li>
                     <li><img src="https://cdn-icons-png.flaticon.com/512/2319/2319177.png" alt=""
                             style="width: 25px; height: 25px; margin-right: 10px; opacity: 0.6;">Buscador</li>
-                    <a href="index.html">
+                    <a href="bandejaEntrada.html">
                         <li><img src="https://cdn-icons-png.flaticon.com/512/736/736175.png " alt=""
                                 style="width: 25px; height: 25px; margin-right: 10px; opacity: 0.6;">Bandeja de entrada
                         </li>
@@ -31,9 +31,11 @@
                             style="width: 25px; height: 25px; margin-right: 10px; opacity: 0.6;">Hoy</li>
                     <li><img src="https://cdn-icons-png.flaticon.com/512/3594/3594034.png" alt=""
                             style="width: 25px; height: 25px; margin-right: 10px; opacity: 0.6;">Próximo</li>
-                    <li><img src="https://cdn-icons-png.flaticon.com/512/4502/4502383.png" alt=""
-                            style="width: 25px; height: 25px; margin-right: 10px; opacity: 0.6;">Filtros y Etiquetas
-                    </li>
+                    <a href="filtrosYEtiquetas.html">
+                        <li><img src="https://cdn-icons-png.flaticon.com/512/4502/4502383.png" alt=""
+                                style="width: 25px; height: 25px; margin-right: 10px; opacity: 0.6;">Filtros y Etiquetas
+                        </li>
+                    </a>
                     <a href="tareasCompletadas.html">
                         <li><img src="https://cdn-icons-png.flaticon.com/512/15473/15473204.png" alt=""
                                 style="width: 25px; height: 25px; margin-right: 10px; opacity: 0.6;">Más</li>
@@ -53,6 +55,37 @@
                 </ul>
             </div>
         </div>
+
+        <!--Formulario de tarea desde el menú-->
+        <div class="modal" id="formulario-tareas-menu">
+            <div class="formulario-tareas">
+                <form action="">
+                    <div class="grupo-texto">
+                        <input type="text" placeholder="Nombre de la tarea" id="nombreTareaMenu">
+                        <input type="text" placeholder="Descripción" id="descripcionTareaMenu">
+                    </div>
+
+                    <div class="grupo-opciones">
+                        <input type="date" id="fechaTareaMenu" name="fecha" placeholder="Fecha">
+                        <button type="button">⚑ Prioridad</button>
+                        <button type="button">⏰ Recordatorios</button>
+                        <button type="button">⋯</button>
+                    </div>
+
+                    <div class="grupo-final">
+                        <select>
+                            <option>Bandeja de entrada</option>
+                        </select>
+                        <div class="acciones">
+                            <button type="button" class="cancelar"
+                                id="desaparecerFormularioAñadirTareaMenu">Cancelar</button>
+                            <button type="submit" class="añadir" id="nuevaTareaMenu">Añadir tarea</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
     </div>
     <script src="js/tareasCompletadas.js"></script>
 </body>

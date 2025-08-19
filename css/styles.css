@@ -1,59 +1,62 @@
-*{
+* {
     margin: 0px;
     font-family: Arial, 'Inter', 'Roboto', sans-serif;
 }
 
 body {
-  font-family: 'Inter', sans-serif;
+    font-family: 'Inter', sans-serif;
 }
 
 /* El contenedor principal ocupa toda la latura de la ventana*/
-.container{
+.container {
     display: flex;
-    height: 100vh; /*100% la altura viewport*/
+    height: 100vh;
+    /*100% la altura viewport*/
 }
 
-.menu{
+.menu {
     background-color: rgb(250, 250, 250);
     height: max-content;
     width: 275px;
-    height: 100%; /*Como esta dentro de un contenedor por el container que abarque el porcentaje de este*/
+    height: 100%;
+    /*Como esta dentro de un contenedor por el container que abarque el porcentaje de este*/
     padding: 0px;
     box-sizing: border-box;
 }
 
-.menu ul{
+.menu ul {
     list-style-type: none;
     padding-left: 13px;
     margin: 0px;
     margin-top: 30px;
 }
 
-.menu ul li{
+.menu ul li {
     margin-bottom: 5px;
     width: 240px;
     height: 40px;
     border-radius: 5px;
     display: flex;
-    align-items: center;     /* centra vertical */
+    align-items: center;
+    /* centra vertical */
     padding-left: 5px;
     font-size: 14px;
 }
 
-.menu ul li:hover{
+.menu ul li:hover {
     background-color: rgb(204, 204, 204);
 }
 
-#ayuda{
+#ayuda {
     margin-top: 296px;
 }
 
-#perfil{
+#perfil {
     margin-top: -15px;
     margin-bottom: 15px;
 }
 
-#iconoañadirTarea{
+#iconoañadirTarea {
     margin-bottom: 15px;
 }
 
@@ -62,15 +65,17 @@ body {
 
 
 .contenido-lateral {
-  flex: 1; /* ocupa todo el espacio horizontal restante */
-  padding: 20px;
+    flex: 1;
+    /* ocupa todo el espacio horizontal restante */
+    padding: 20px;
 }
 
 /*Imagen y texto si no hay nada*/
-.bandeja{
+.bandeja {
     text-align: center;
 }
-.añadirdeter{
+
+.añadirdeter {
     background-color: #dadada;
     padding: 7px;
     margin-top: 10px;
@@ -84,7 +89,7 @@ body {
     border-radius: 8px;
     padding: 10px;
     width: 900px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     font-family: Arial, sans-serif;
     text-align: center;
     margin: 0 auto;
@@ -108,7 +113,7 @@ body {
     margin: 10px 0;
 }
 
-.grupo-opciones button{
+.grupo-opciones button {
     border: 1px solid #ddd;
     background: white;
     padding: 6px 10px;
@@ -118,17 +123,17 @@ body {
 
 
 .grupo-opciones input[type="date"] {
-  border: 1px solid #ddd;
-  background: white;
-  padding: 6px 10px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-family: inherit;
-  font-size: 14px;
+    border: 1px solid #ddd;
+    background: white;
+    padding: 6px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
 }
 
 .grupo-opciones input[type="date"]:hover {
-  border-color: #aaa;
+    border-color: #aaa;
 }
 
 .grupo-final {
@@ -167,11 +172,15 @@ select {
 
 /*Estilos especificos para el formulario flotante de editar tarea*/
 #formulario-tareas-editar {
-    position: fixed;          /* Se queda flotando en la pantalla */
-    top: 50%;                  /* Centrado vertical */
-    left: 60%;                 /* Centrado horizontal */
+    position: fixed;
+    /* Se queda flotando en la pantalla */
+    top: 50%;
+    /* Centrado vertical */
+    left: 60%;
+    /* Centrado horizontal */
     transform: translate(-50%, -50%);
-    z-index: 1000;             /* Encima del resto de elementos */
+    z-index: 1000;
+    /* Encima del resto de elementos */
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     width: 1000px;
 }
@@ -189,24 +198,27 @@ select {
 
 
 /*Clase para ocultar cosas*/
-.oculto{
-    display: none;
+.oculto {
+    display: none !important;
 }
 
 /*Estilos de lista de tareas*/
-ul{
+ul {
     list-style-type: none;
     padding: 0px;
 }
 
-.contenedorListaTarea{
+.contenedorListaTarea {
     display: flex;
-    flex-direction: column; /* eje principal vertical */
-    gap: 10px; /* espacio entre elementos */
-    align-items: flex-start; /* alineación horizontal */
+    flex-direction: column;
+    /* eje principal vertical */
+    gap: 10px;
+    /* espacio entre elementos */
+    align-items: flex-start;
+    /* alineación horizontal */
 }
 
-.claseTareas{
+.claseTareas {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -215,44 +227,44 @@ ul{
     border-bottom: 2px solid #d3d6da;
 }
 
-.claseTareas:hover{
+.claseTareas:hover {
     background-color: rgb(204, 204, 204);
 }
 
-.divBotones{
+.divBotones {
     display: flex;
     align-items: center;
     gap: 15px;
 }
 
-.imagenesBotones{
+.imagenesBotones {
     width: 25px;
     height: 25px;
 }
 
-.imagenesBotonesFecha{
+.imagenesBotonesFecha {
     width: 14px;
     height: 14px;
 }
 
-.divListaTareas{
+.divListaTareas {
     width: 900px;
     margin: 0 auto;
 
 }
 
-.fechaTarea{
+.fechaTarea {
     opacity: 0.7;
     font-size: 13px;
 }
 
-#h1bandejaEntrada{
+#h1bandejaEntrada {
     margin-top: 30px;
     margin-bottom: 30px;
 }
 
 /*Estilo del boton que aparece debajo de la lista de tareas*/
-#añadirtareaoculto{
+#añadirtareaoculto {
     margin-top: 10px;
     margin-bottom: 10px;
 }
@@ -260,29 +272,177 @@ ul{
 .imagenytextofecha {
     display: flex;
     gap: 4px;
+    align-items: center;
 }
 
-.claseHoy{
+.claseHoy {
     color: green;
     opacity: 1;
     font-size: 13px;
 }
 
-.claseMañana{
+.claseMañana {
     color: orange;
     opacity: 1;
     font-size: 13px;
 
 }
 
-.claseDiaSemana{
+.claseDiaSemana {
     color: purple;
     opacity: 1;
     font-size: 13px;
 
 }
+
 a {
-  text-decoration: none; /* Quita el subrayado */
-  color: inherit;        /* Hereda el color del contenedor */
-  cursor: pointer;       /* Opcional: mantiene el cursor de puntero */
+    text-decoration: none;
+    /* Quita el subrayado */
+    color: inherit;
+    /* Hereda el color del contenedor */
+    cursor: pointer;
+    /* Opcional: mantiene el cursor de puntero */
 }
+
+/*Formulario para nuevo filro*/
+/* Fondo modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    font-family: Arial, sans-serif;
+    display: flex;              /* 👈 falta esto */
+    justify-content: center;    /* centra horizontal */
+    align-items: center;
+}
+
+/* Contenido */
+.modal-contenido {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    width: 380px;
+    position: relative;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    animation: aparecer 0.2s ease;
+}
+
+@keyframes aparecer {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Botón cerrar */
+.cerrar {
+    position: absolute;
+    top: 12px;
+    right: 15px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #666;
+}
+
+/* Inputs */
+label {
+    font-size: 14px;
+    display: block;
+    margin: 15px 0 5px;
+    color: #333;
+}
+
+
+.NombreFiltro[type="text"],
+#colorEtiqueta {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.NombreFiltro[type="text"]:focus,
+#colorEtiqueta:focus {
+    outline: none;
+    border: 1px solid #1976d2;
+}
+
+/* Switch estilo toggle */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 38px;
+    height: 20px;
+    margin-right: 8px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    background-color: #ccc;
+    border-radius: 20px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transition: .3s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    border-radius: 50%;
+    transition: .3s;
+}
+
+.switch input:checked+.slider {
+    background-color: #1976d2;
+}
+
+.switch input:checked+.slider:before {
+    transform: translateX(18px);
+}
+
+.NombreFiltro {
+    width: 357px !important;
+}
+
+#accionesFiltros {
+    margin-top: 20px;
+    justify-content: flex-end;
+}
+
+#idlistaFiltros {
+    border-bottom: none;
+}
+
+#h1FiltrosyEtiquetas{
+    margin-bottom: 20px;
+    margin-top: 20px;
+    text-align: left;
+}
+
+

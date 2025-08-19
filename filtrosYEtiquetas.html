@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do App</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+    <!--Menú-->
+    <div class="container">
+        <div class="menu">
+            <nav>
+                <ul>
+                    <li id="perfil"><img src="https://cdn-icons-png.flaticon.com/512/1946/1946429.png" alt=""
+                            style="width: 25px; height: 25px; margin-right: 10px;">Luis</li>
+                    <li id="iconoañadirTarea"><img src="https://cdn-icons-png.flaticon.com/512/15867/15867069.png"
+                            alt="" style="width: 25px; height: 25px; margin-right: 10px;">Añadir tarea</li>
+                    <li><img src="https://cdn-icons-png.flaticon.com/512/2319/2319177.png" alt=""
+                            style="width: 25px; height: 25px; margin-right: 10px; opacity: 0.6;">Buscador</li>
+                    <a href="bandejaEntrada.html">
+                        <li><img src="https://cdn-icons-png.flaticon.com/512/736/736175.png " alt=""
+                                style="width: 25px; height: 25px; margin-right: 10px; opacity: 0.6;">Bandeja de entrada
+                        </li>
+                    </a>
+                    <li><img src="https://cdn-icons-png.flaticon.com/512/1827/1827444.png" alt=""
+                            style="width: 25px; height: 25px; margin-right: 10px; opacity: 0.6;">Hoy</li>
+                    <li><img src="https://cdn-icons-png.flaticon.com/512/3594/3594034.png" alt=""
+                            style="width: 25px; height: 25px; margin-right: 10px; opacity: 0.6;">Próximo</li>
+                    <a href="filtrosYEtiquetas.html">
+                        <li><img src="https://cdn-icons-png.flaticon.com/512/4502/4502383.png" alt=""
+                                style="width: 25px; height: 25px; margin-right: 10px; opacity: 0.6;">Filtros y Etiquetas
+                        </li>
+                    </a>
+                    <a href="tareasCompletadas.html">
+                        <li><img src="https://cdn-icons-png.flaticon.com/512/15473/15473204.png" alt=""
+                                style="width: 25px; height: 25px; margin-right: 10px; opacity: 0.6;">Más</li>
+                    </a>
+                    <li id="ayuda"><img src="https://cdn-icons-png.flaticon.com/512/3772/3772046.png " alt=""
+                            style="width: 30px; height: 30px; margin-right: 10px; opacity: 0.6;">Ayuda y Recursos</li>
+                </ul>
+
+            </nav>
+        </div>
+        <div class="contenido-lateral">
+            <!--Bandeja de entrada-->
+            <!-- <div class="bandeja" id="bandeja">
+                <img src="img/bandeja.png" alt="" style="width: 525px; height: 500px;">
+                <h3>Captura ahora, planifica después</h3>
+                <p>La Bandeja de entrada es el lugar ideal para añadir tus tareas de forma rápida.<br>Libera tu mente
+                    ahora,organiza después.</p>
+
+                <button class="añadirdeter" id="aparecerFormulario"><img
+                        src="https://cdn-icons-png.flaticon.com/512/1828/1828921.png" alt=""
+                        style="width: 10px; height: 10px; margin-right: 10px;">Añadir tarea</button>
+            </div>
+            <br> -->
+            <!--Parte en que se muestran las tarea-->
+            <div class="divListaTareas">
+                <h1 id="h1FiltrosyEtiquetas">Filtros y Etiquetas</h1>
+                <ul id="listaFiltros">
+
+                </ul>
+                <h5 id="añadirfiltroaoculto"><img src="https://cdn-icons-png.flaticon.com/512/1828/1828921.png" alt=""
+                        style="width: 10px; height: 10px; margin-right: 10px;">Añadir filtro</h5>
+            </div>
+            <!--Formulario para crear un filtro-->
+            <div class="modal" id="formularioAñadirFiltro">
+                <div class="modal-contenido">
+                    <span class="cerrar" id="cerrarModal">&times;</span>
+                    <h3>Añadir filtro</h3>
+
+                    <form id="formEtiqueta">
+                        <!-- Nombre -->
+                        <label for="nombreFiltro">Nombre</label>
+                        <input type="text" id="nombreFiltro" class="NombreFiltro" maxlength="60"
+                            placeholder="Introduce un nombre..." required>
+
+                        <!-- Color -->
+                        <label for="colorEtiqueta">Color</label>
+                        <select id="colorEtiqueta">
+                            <option value="carbon">⚫ Carbón</option>
+                            <option value="rojo">🔴 Rojo</option>
+                            <option value="azul">🔵 Azul</option>
+                            <option value="verde">🟢 Verde</option>
+                        </select>
+                        <!-- Botones -->
+                        <div class="acciones" id="accionesFiltros">
+                            <button type="button" class="cancelar"
+                                id="desaparecerFormularioNuevoFiltro">Cancelar</button>
+                            <button type="submit" class="añadir" id="nuevoFiltro">Añadir</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!--Formulario para editar un filtro-->
+            <div class="modal" id="formularioEditarFiltro">
+                <div class="modal-contenido">
+                    <span class="cerrar" id="cerrarModalEditando">&times;</span>
+                    <h3>Editar filtro</h3>
+
+                    <form id="formEtiqueta">
+                        <!-- Nombre -->
+                        <label for="nombreFiltroEditar">Nombre</label>
+                        <input type="text" id="nombreFiltroEditar" class="NombreFiltro" maxlength="60"
+                            placeholder="Introduce un nombre..." required>
+
+                        <!-- Color -->
+                        <label for="colorEtiqueta">Color</label>
+                        <select id="colorEtiqueta">
+                            <option value="carbon">⚫ Carbón</option>
+                            <option value="rojo">🔴 Rojo</option>
+                            <option value="azul">🔵 Azul</option>
+                            <option value="verde">🟢 Verde</option>
+                        </select>
+                        <!-- Botones -->
+                        <div class="acciones" id="accionesFiltros">
+                            <button type="button" class="cancelar"
+                                id="desaparecerFormularioEditarFiltro">Cancelar</button>
+                            <button type="submit" class="añadir" id="guardarFiltro">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!--Formulario de tarea desde el menú-->
+            <div class="modal" id="formulario-tareas-menu">
+                <div class="formulario-tareas">
+                    <form action="">
+                        <div class="grupo-texto">
+                            <input type="text" placeholder="Nombre de la tarea" id="nombreTareaMenu">
+                            <input type="text" placeholder="Descripción" id="descripcionTareaMenu">
+                        </div>
+
+                        <div class="grupo-opciones">
+                            <input type="date" id="fechaTareaMenu" name="fecha" placeholder="Fecha">
+                            <button type="button">⚑ Prioridad</button>
+                            <button type="button">⏰ Recordatorios</button>
+                            <button type="button">⋯</button>
+                        </div>
+
+                        <div class="grupo-final">
+                            <select>
+                                <option>Bandeja de entrada</option>
+                            </select>
+                            <div class="acciones">
+                                <button type="button" class="cancelar" id="desaparecerFormularioAñadirTareaMenu">Cancelar</button>
+                                <button type="submit" class="añadir" id="nuevaTareaMenu">Añadir tarea</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <script src="js/filtrosYEtiquetas.js">
+    </script>
+
+</body>
+
+</html>
