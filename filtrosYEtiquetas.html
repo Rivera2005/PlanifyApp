@@ -33,17 +33,17 @@
                             style="width: 25px; height: 25px; margin-right: 10px; opacity: 0.6;">Próximo</li>
                     <a href="filtrosYEtiquetas.html">
                         <li><img src="https://cdn-icons-png.flaticon.com/512/4502/4502383.png" alt=""
-                                style="width: 25px; height: 25px; margin-right: 10px; opacity: 0.6;">Filtros y Etiquetas
+                                style="width: 25px; height: 25px; margin-right: 10px; opacity: 0.6;">Filtros
                         </li>
                     </a>
                     <a href="tareasCompletadas.html">
-                        <li><img src="https://cdn-icons-png.flaticon.com/512/15473/15473204.png" alt=""
-                                style="width: 25px; height: 25px; margin-right: 10px; opacity: 0.6;">Más</li>
+                        <li><img src="https://cdn-icons-png.flaticon.com/512/1722/1722039.png" alt=""
+                                style="width: 25px; height: 25px; margin-right: 10px; opacity: 0.6;">Tareas completadas
+                        </li>
                     </a>
                     <li id="ayuda"><img src="https://cdn-icons-png.flaticon.com/512/3772/3772046.png " alt=""
                             style="width: 30px; height: 30px; margin-right: 10px; opacity: 0.6;">Ayuda y Recursos</li>
                 </ul>
-
             </nav>
         </div>
         <div class="contenido-lateral">
@@ -61,12 +61,17 @@
             <br> -->
             <!--Parte en que se muestran las tarea-->
             <div class="divListaTareas">
-                <h1 id="h1FiltrosyEtiquetas">Filtros y Etiquetas</h1>
+                <h1 id="h1FiltrosyEtiquetas">Filtros</h1>
+                <div style="display: flex; padding: 0px; padding-bottom: 5px; border-bottom: 1.5px solid #eeeeee;">
+                    
+                    <h5 id="añadirfiltroaoculto" style="margin-left: auto;"><img
+                            src="https://cdn-icons-png.flaticon.com/512/1828/1828921.png" alt=""
+                            style="width: 10px; height: 10px; margin-right: 10px; opacity: 0.7;"></h5>
+                </div>
                 <ul id="listaFiltros">
 
                 </ul>
-                <h5 id="añadirfiltroaoculto"><img src="https://cdn-icons-png.flaticon.com/512/1828/1828921.png" alt=""
-                        style="width: 10px; height: 10px; margin-right: 10px;">Añadir filtro</h5>
+
             </div>
             <!--Formulario para crear un filtro-->
             <div class="modal" id="formularioAñadirFiltro">
@@ -147,7 +152,8 @@
                                 <option>Bandeja de entrada</option>
                             </select>
                             <div class="acciones">
-                                <button type="button" class="cancelar" id="desaparecerFormularioAñadirTareaMenu">Cancelar</button>
+                                <button type="button" class="cancelar"
+                                    id="desaparecerFormularioAñadirTareaMenu">Cancelar</button>
                                 <button type="submit" class="añadir" id="nuevaTareaMenu">Añadir tarea</button>
                             </div>
                         </div>

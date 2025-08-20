@@ -6,54 +6,98 @@ function tareasCompletadas(event) {
   const tareasCompletadas =
     JSON.parse(localStorage.getItem("tareasCompletadas")) || [];
   mostrarTareasCompletadas(tareasCompletadas);
-  //h1bandejaEntrada.classList.remove("oculto");
-  //console.log(tareasCompletadas);
 }
 // Función que llama a todos los elementos necesarios para crear el li de la tarea
 function mostrarTareasCompletadas(arregloTareas) {
+  // Llamar al ul que almacena la lista de tareas
   const listaTareasCompletadas = document.getElementById(
     "listaTareasCompletadas"
   );
   listaTareasCompletadas.innerHTML = ""; // Limpiar lista antes de mostrar
 
-  //Recorro cada elemento del arreglo, y como cada elemento es objeto Tarea, agarro la propiedad nombre
-  arregloTareas.forEach(function (tarea) {
-    listaTareasCompletadas.appendChild(crearElementoTareaCompletada(tarea));
+  // Agrupar tareas pro fecha de completado
+  const tareasPorFecha = {};
+
+  arregloTareas.forEach((tarea) => {
+    // Extraer solo la parte de la fecha (antes de la coma)
+    const [fechaCorta] = tarea.completadaEn.split(",");
+    if (!tareasPorFecha[fechaCorta]) {
+      tareasPorFecha[fechaCorta] = [];
+    }
+    tareasPorFecha[fechaCorta].push(tarea);
+  });
+
+  // Recorrer fechas en orden descendente (más recientes primero)
+  const fechasOrdenadas = Object.keys(tareasPorFecha).sort((a, b) => {
+    const [da, ma, ya] = a.split("/").map(Number);
+    const [db, mb, yb] = b.split("/").map(Number);
+    return new Date(yb, mb - 1, db) - new Date(ya, ma - 1, da);
+  });
+
+  fechasOrdenadas.forEach((fechaCorta) => {
+    // --- Formato "Ago 15 ‧ viernes" ---
+    const [dia, mes, anio] = fechaCorta.split("/").map(Number);
+    const fechaObj = new Date(anio, mes - 1, dia);
+
+    const opcionesMes = { month: "short" };
+    const opcionesDiaSemana = { weekday: "long" };
+
+    const mesAbrev = fechaObj.toLocaleDateString("es-ES", opcionesMes); // "ago"
+    const diaNum = fechaObj.getDate(); // 15
+    const diaSemana = fechaObj.toLocaleDateString("es-ES", opcionesDiaSemana); // "viernes"
+
+    const tituloFecha = document.createElement("h4");
+    tituloFecha.textContent = `${
+      mesAbrev.charAt(0).toUpperCase() + mesAbrev.slice(1)
+    } ${diaNum} ‧ ${diaSemana}`;
+    tituloFecha.className = "tituloFechaGrupo";
+
+    listaTareasCompletadas.appendChild(tituloFecha);
+
+    // Crear lista de tareas de esa fecha
+    const ulGrupo = document.createElement("ul");
+    ulGrupo.className = "grupoTareas";
+
+    tareasPorFecha[fechaCorta].forEach((tarea) => {
+      ulGrupo.appendChild(crearElementoTareaCompletada(tarea));
+    });
+
+    listaTareasCompletadas.appendChild(ulGrupo);
   });
 }
+
 // Crea el elemento tarea
 function crearElementoTareaCompletada(tarea) {
   // Creo el elemento li para la nueva tarea, se le asigna una clase de css
   const nuevaTarea = document.createElement("li");
   nuevaTarea.className = "claseTareas";
+  nuevaTarea.id = "tareacompleatada";
   // Creo un div en el que ira el nombre y fecha de la tarea, cada uno con un p
   const contenedorTarea = document.createElement("div");
   contenedorTarea.className = "contenedorListaTarea";
   // Elemento p que llevara el nombre de la tarea Completada
   const nombreTareaP = document.createElement("p");
-  nombreTareaP.textContent = tarea.name;
-  // Elemento p que llevara la fecha de la tarea Completada
-  const fechaTareaP = document.createElement("p");
-  fechaTareaP.className = "fechaTarea";
-  // Llamado a las funciones para darle nuevo formato a la tarea
-  const fechaAMostrar = nuevoFormatoFechaTarea(tarea.fecha);
-  const fechaConColor = colorFechaMostrar(fechaAMostrar);
-  // Imagen que acompaña a la fecha que se muestra
-  const imagenFechaTarea = document.createElement("img");
-  imagenFechaTarea.src =
-    "https://cdn-icons-png.flaticon.com/512/661/661512.png";
-  imagenFechaTarea.className = "imagenesBotonesFecha";
-  // Elemento div creado para uir la imagen y el elemento p de fecha
-  const divFechaImagenTarea = document.createElement("div");
-  divFechaImagenTarea.className = "imagenytextofecha";
-  divFechaImagenTarea.appendChild(imagenFechaTarea);
-  divFechaImagenTarea.appendChild(fechaConColor);
-  // uno los elementos hijos (nombre ye fecha) al padre (div que los contiene)
+  nombreTareaP.innerHTML =
+    "<strong style='font-size:15px;'>Tú</strong> " +
+    '<span style="color:#202020; opacity:0.7; font-size:13.9px;">completaste una tarea:</span> ' +
+    "<u>" +
+    tarea.name +
+    "</u>";
+  // Extraer hora:minuto de completadaEn
+  const horaMinuto = tarea.completadaEn.split(",")[1].trim(); // "8:14:57 p.m."
+  const horaCorta =
+    horaMinuto.split(":")[0] +
+    ":" +
+    horaMinuto.split(":")[1] +
+    (horaMinuto.includes("a.m.") ? " am" : " pm");
+  //Creo el elemento p que lleva la fecha
+  const horaP = document.createElement("p");
+  horaP.className = "horaCompletada";
+  horaP.textContent = horaCorta;
+  // Añadir al contenedor
   contenedorTarea.appendChild(nombreTareaP);
-  // condicional, el de mostar o no fecha (ayuda al estilo)
-  if (tarea.fecha !== "") {
-    contenedorTarea.appendChild(divFechaImagenTarea);
-  }
+  contenedorTarea.appendChild(horaP);
+
   nuevaTarea.appendChild(contenedorTarea);
   // retornamos el elemento li con todo sus propiedades
   return nuevaTarea;

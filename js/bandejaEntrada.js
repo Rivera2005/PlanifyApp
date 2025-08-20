@@ -245,7 +245,10 @@ function crearBotonCompletar(index) {
   imagenBotonCompletado.addEventListener("click", function () {
     // Eliminar del array y crea un nuevo array que es el que voy a mostrar con completadas, el index viene de la funcion mostrarLista -> crearElementoLista
     // agrego al arreglo de Tareas Completadas el elemento que se acaba de eliminar del arreglo de tareas
-    tareasCompletadasArreglo.push(tareas.splice(index, 1)[0]);
+    // lo guardamos en una nueva constante para agregarle la propiedad de completadaEn que llevara la fecha en el momento que se compelto la tarea
+    const tareaCompletada = tareas.splice(index, 1)[0];
+    tareaCompletada.completadaEn = new Date().toLocaleString();
+    tareasCompletadasArreglo.push(tareaCompletada);
     // Envio ese nuevo arreglo para que se sobreescriba el que ya estaba en el LocalStorage, haciendo que se guarde la nueva tarea completada
     localStorage.setItem(
       "tareasCompletadas",

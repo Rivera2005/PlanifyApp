@@ -32,15 +32,18 @@ body {
 }
 
 .menu ul li {
-    margin-bottom: 5px;
-    width: 240px;
-    height: 40px;
+    margin-bottom: 0px;
+    width: 230px;
+    height: 34px;
     border-radius: 5px;
     display: flex;
     align-items: center;
     /* centra vertical */
     padding-left: 5px;
+    margin-bottom: 5px;
+
     font-size: 14px;
+    color: #39485E;
 }
 
 .menu ul li:hover {
@@ -48,16 +51,16 @@ body {
 }
 
 #ayuda {
-    margin-top: 296px;
+    margin-top: 360px;
 }
 
 #perfil {
     margin-top: -15px;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
 }
 
 #iconoañadirTarea {
-    margin-bottom: 15px;
+    margin-bottom: 12px;
 }
 
 
@@ -216,6 +219,7 @@ ul {
     /* espacio entre elementos */
     align-items: flex-start;
     /* alineación horizontal */
+    color: #202020;
 }
 
 .claseTareas {
@@ -223,13 +227,9 @@ ul {
     align-items: center;
     justify-content: space-between;
     padding: 10px;
-    border-radius: 20px;
-    border-bottom: 2px solid #d3d6da;
+    border-bottom: 1.5px solid #eeeeee;
 }
 
-.claseTareas:hover {
-    background-color: rgb(204, 204, 204);
-}
 
 .divBotones {
     display: flex;
@@ -267,6 +267,7 @@ ul {
 #añadirtareaoculto {
     margin-top: 10px;
     margin-bottom: 10px;
+    color: #808080;
 }
 
 .imagenytextofecha {
@@ -317,8 +318,10 @@ a {
     align-items: center;
     z-index: 1000;
     font-family: Arial, sans-serif;
-    display: flex;              /* 👈 falta esto */
-    justify-content: center;    /* centra horizontal */
+    display: flex;
+    /* 👈 falta esto */
+    justify-content: center;
+    /* centra horizontal */
     align-items: center;
 }
 
@@ -435,14 +438,26 @@ label {
     justify-content: flex-end;
 }
 
-#idlistaFiltros {
-    border-bottom: none;
+
+#h1FiltrosyEtiquetas {
+    margin-top: 30px;
+    margin-bottom: 30px;
 }
 
-#h1FiltrosyEtiquetas{
-    margin-bottom: 20px;
-    margin-top: 20px;
+/*Clase para el estilo de la fecha para las tareas completadas*/
+.tituloFechaGrupo {
+    margin-top: 10px;
+    margin-bottom: 0px;
     text-align: left;
+    font-size: 15px;
+    margin-left: 5px;
+    border-bottom: 1.5px solid #eeeeee;
+    padding-bottom: 10px;
+
 }
 
-
+.horaCompletada {
+    margin-top: -5px;
+    font-size: 12px;
+    opacity: 0.6;
+}
