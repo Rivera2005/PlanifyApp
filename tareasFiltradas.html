@@ -50,58 +50,20 @@
             </nav>
         </div>
         <div class="contenido-lateral">
-            <!--Bandeja de entrada-->
+            <!--Imagen y texto que se muestra si no hya ni una tarea con ese filtro-->
             <div class="bandeja" id="bandeja">
-                <img src="img/bandeja.png" alt="" style="width: 525px; height: 500px;">
-                <h3>Captura ahora, planifica después</h3>
-                <p>La Bandeja de entrada es el lugar ideal para añadir tus tareas de forma rápida.<br>Libera tu mente
-                    ahora,organiza después.</p>
-
-                <button class="añadirdeter" id="aparecerFormulario"><img
-                        src="https://cdn-icons-png.flaticon.com/512/1828/1828921.png" alt=""
-                        style="width: 10px; height: 10px; margin-right: 10px;">Añadir tarea</button>
+                <img src="img/NoFiltro.png" alt="" style="width: 525px; height: 500px;">
+                <h3>De momento no hay tareas en este filtro</h3>
             </div>
             <br>
             <!--Parte en que se muestran las tarea-->
             <div class="divListaTareas">
-                <h1 id="h1bandejaEntrada">Bandeja de Entrada</h1>
+                <h1 id="h1bandejaEntrada"></h1>
                 <ul id="listaTareas">
 
                 </ul>
-                <h5 id="añadirtareaoculto"><img src="https://cdn-icons-png.flaticon.com/512/1828/1828921.png" alt=""
-                        style="width: 10px; height: 10px; margin-right: 10px;">Añadir tarea</h5>
             </div>
-            <!--Formulario de tarea-->
-            <div class="formulario-tareas" id="formulario-tareas">
-                <form action="">
-                    <div class="grupo-texto">
-                        <input type="text" placeholder="Nombre de la tarea" id="nombreTarea">
-                        <input type="text" placeholder="Descripción" id="descripcionTarea">
-                    </div>
-
-                    <div class="grupo-opciones">
-                        <input type="date" id="fechaTarea" name="fecha" placeholder="Fecha">
-                        <button type="button"><select id="opcionesFiltros">
-                                <option value="" disabled selected>🏳️ Prioridad</option>
-
-                                <!--Aqui se mostraran los filtros creados-->
-                            </select></button>
-                        <button type="button">⏰ Recordatorios</button>
-                        <button type="button">⋯</button>
-                    </div>
-
-                    <div class="grupo-final">
-                        <select>
-                            <option>Bandeja de entrada</option>
-                        </select>
-                        <div class="acciones">
-                            <button type="button" class="cancelar" id="desaparecerFormulario">Cancelar</button>
-                            <button type="submit" class="añadir" id="nuevaTarea">Añadir tarea</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <!--Formulario para editar una tarea tarea-->
+            <!--Formulario para editar una tarea tarea del filtro especifico-->
             <div id="fondoOscuroEditar">
                 <div class="formulario-tareas" id="formulario-tareas-editar">
                     <form action="">
@@ -132,10 +94,39 @@
                     </form>
                 </div>
             </div>
+            <!--Formulario de tarea desde el menú-->
+            <div class="modal" id="formulario-tareas-menu">
+                <div class="formulario-tareas">
+                    <form action="">
+                        <div class="grupo-texto">
+                            <input type="text" placeholder="Nombre de la tarea" id="nombreTareaMenu">
+                            <input type="text" placeholder="Descripción" id="descripcionTareaMenu">
+                        </div>
+
+                        <div class="grupo-opciones">
+                            <input type="date" id="fechaTareaMenu" name="fecha" placeholder="Fecha">
+                            <button type="button">⚑ Prioridad</button>
+                            <button type="button">⏰ Recordatorios</button>
+                            <button type="button">⋯</button>
+                        </div>
+
+                        <div class="grupo-final">
+                            <select>
+                                <option>Bandeja de entrada</option>
+                            </select>
+                            <div class="acciones">
+                                <button type="button" class="cancelar"
+                                    id="desaparecerFormularioAñadirTareaMenu">Cancelar</button>
+                                <button type="submit" class="añadir" id="nuevaTareaMenu">Añadir tarea</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
 
         </div>
     </div>
-    <script src="js/bandejaEntrada.js"></script>
+    <script src="js/prioridad1.js"></script>
 </body>
 
 </html>

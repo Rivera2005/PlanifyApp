@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>To Do App</title>
+    <title>Planify</title>
     <link rel="stylesheet" href="css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-
+    <link rel="icon" type="image/png" href="img/calendario.png">
 </head>
 
 <body>
@@ -18,8 +18,10 @@
                 <ul>
                     <li id="perfil"><img src="https://cdn-icons-png.flaticon.com/512/1946/1946429.png" alt=""
                             style="width: 25px; height: 25px; margin-right: 10px;">Luis</li>
-                    <li id="iconoañadirTarea"><img src="https://cdn-icons-png.flaticon.com/512/15867/15867069.png"
-                            alt="" style="width: 25px; height: 25px; margin-right: 10px;">Añadir tarea</li>
+                    <a>
+                        <li id="iconoañadirTarea"><img src="https://cdn-icons-png.flaticon.com/512/15867/15867069.png"
+                                alt="" style="width: 25px; height: 25px; margin-right: 10px;">Añadir tarea</li>
+                    </a>
                     <li><img src="https://cdn-icons-png.flaticon.com/512/2319/2319177.png" alt=""
                             style="width: 25px; height: 25px; margin-right: 10px; opacity: 0.6;">Buscador</li>
                     <a href="bandejaEntrada.html">
@@ -63,7 +65,7 @@
             <div class="divListaTareas">
                 <h1 id="h1FiltrosyEtiquetas">Filtros</h1>
                 <div style="display: flex; padding: 0px; padding-bottom: 5px; border-bottom: 1.5px solid #eeeeee;">
-                    
+
                     <h5 id="añadirfiltroaoculto" style="margin-left: auto;"><img
                             src="https://cdn-icons-png.flaticon.com/512/1828/1828921.png" alt=""
                             style="width: 10px; height: 10px; margin-right: 10px; opacity: 0.7;"></h5>
@@ -84,15 +86,6 @@
                         <label for="nombreFiltro">Nombre</label>
                         <input type="text" id="nombreFiltro" class="NombreFiltro" maxlength="60"
                             placeholder="Introduce un nombre..." required>
-
-                        <!-- Color -->
-                        <label for="colorEtiqueta">Color</label>
-                        <select id="colorEtiqueta">
-                            <option value="carbon">⚫ Carbón</option>
-                            <option value="rojo">🔴 Rojo</option>
-                            <option value="azul">🔵 Azul</option>
-                            <option value="verde">🟢 Verde</option>
-                        </select>
                         <!-- Botones -->
                         <div class="acciones" id="accionesFiltros">
                             <button type="button" class="cancelar"
@@ -113,15 +106,6 @@
                         <label for="nombreFiltroEditar">Nombre</label>
                         <input type="text" id="nombreFiltroEditar" class="NombreFiltro" maxlength="60"
                             placeholder="Introduce un nombre..." required>
-
-                        <!-- Color -->
-                        <label for="colorEtiqueta">Color</label>
-                        <select id="colorEtiqueta">
-                            <option value="carbon">⚫ Carbón</option>
-                            <option value="rojo">🔴 Rojo</option>
-                            <option value="azul">🔵 Azul</option>
-                            <option value="verde">🟢 Verde</option>
-                        </select>
                         <!-- Botones -->
                         <div class="acciones" id="accionesFiltros">
                             <button type="button" class="cancelar"

@@ -154,6 +154,7 @@ select {
 .acciones {
     display: flex;
     gap: 8px;
+    align-items: center;
 }
 
 .cancelar {
@@ -225,7 +226,6 @@ ul {
 .claseTareas {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     padding: 10px;
     border-bottom: 1.5px solid #eeeeee;
 }
@@ -235,6 +235,7 @@ ul {
     display: flex;
     align-items: center;
     gap: 15px;
+    margin-left: auto;
 }
 
 .imagenesBotones {
@@ -283,8 +284,7 @@ ul {
 }
 
 .claseMañana {
-    color: orange;
-    opacity: 1;
+    color: #ad6200;
     font-size: 13px;
 
 }
@@ -460,4 +460,58 @@ label {
     margin-top: -5px;
     font-size: 12px;
     opacity: 0.6;
+}
+
+input[type="radio"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #b1b1b1;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    margin-right: 15px;
+    align-self: flex-start;
+}
+
+.prioridad1-radio {
+    border: 2px solid #d1453b !important;
+}
+
+.prioridad2-radio {
+    border: 2px solid #eb8907 !important;
+}
+
+.prioridad3-radio {
+    border: 2px solid #246fe1 !important;
+}
+
+.prioridad4-radio {
+    border: 2px solid rgb(12 189 14) !important;
+}
+
+
+.prioridad1 {
+    color: #d1453b;
+    opacity: 1;
+}
+
+.prioridad2 {
+    color: #eb8907;
+    opacity: 1;
+}
+
+.prioridad3 {
+    color: #246fe1;
+    opacity: 1;
+}
+
+.prioridad4{
+    color: rgb(12 189 14);
+    opacity: 1;
+}
+
+.filtroSeleccionar{
+    cursor: pointer;
 }

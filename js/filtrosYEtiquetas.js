@@ -76,11 +76,18 @@ function crearElementoFiltro(filtro, index) {
   // Creo el elemento li para la nueva tarea, se le asigna una clase de css
   const nuevoFiltro = document.createElement("li");
   nuevoFiltro.className = "claseTareas";
-  nuevoFiltro.id = "idlistaFiltros";
-
   // Crear un P para mostrar el nombre del filtro
   const nombreFiltroP = document.createElement("p");
   nombreFiltroP.textContent = filtro.nombre;
+  nombreFiltroP.className = "filtroSeleccionar"
+  // 👉 Evento click en el nombre del filtro
+  nombreFiltroP.addEventListener("click", function () {
+    // Guardar el filtro seleccionado en el localStorage
+    localStorage.setItem("filtroSeleccionado", filtro.nombre);
+
+    // Redirigir a la página donde mostrarás las tareas filtradas
+    window.location.href = "tareasFiltradas.html";
+  });
   // Creo elemento imagen que acompaña a la fecha (calendario)
   const imagenFiltroTarea = document.createElement("img");
   imagenFiltroTarea.src =
@@ -208,7 +215,7 @@ document.getElementById("cerrarModal").addEventListener("click", function () {
   limpiarFormularioNuevoFiltro();
 });
 
-// AÑADIR TAREA DESDE EL MENÚ
+// ---------------------------------------- AÑADIR TAREA DESDE EL MENÚ ----------------------------------------------------------
 
 const formulatioAñadirTareaMenu = document.getElementById(
   "formulario-tareas-menu"
