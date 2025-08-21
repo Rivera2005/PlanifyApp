@@ -507,11 +507,17 @@ input[type="radio"] {
     opacity: 1;
 }
 
-.prioridad4{
+.prioridad4 {
     color: rgb(12 189 14);
     opacity: 1;
 }
 
-.filtroSeleccionar{
+.filtroSeleccionar {
     cursor: pointer;
+}
+
+.deshabilitado {
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: not-allowed;
 }

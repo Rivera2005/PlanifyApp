@@ -79,7 +79,7 @@ function crearElementoFiltro(filtro, index) {
   // Crear un P para mostrar el nombre del filtro
   const nombreFiltroP = document.createElement("p");
   nombreFiltroP.textContent = filtro.nombre;
-  nombreFiltroP.className = "filtroSeleccionar"
+  nombreFiltroP.className = "filtroSeleccionar";
   // 👉 Evento click en el nombre del filtro
   nombreFiltroP.addEventListener("click", function () {
     // Guardar el filtro seleccionado en el localStorage
@@ -123,14 +123,69 @@ function crearBotonEliminar(index) {
   //Función de para el completar las tareas
   imagenBotonEliminar.addEventListener("click", function () {
     // Eliminar del array el elemento indicado, el index viene de la funcion mostrarLista -> crearElementoFiltro
-    filtros.splice(index, 1);
-    // Actualizo el arreglo tareas en el LocalStorage
-    localStorage.setItem("filtros", JSON.stringify(filtros));
-    // Volver a mostrar lista actualizada, el tareas llamado es el array que esta fuera, este tareas es el que esta definido al principio del codigo
-    mostrarFiltros(filtros);
+    indiceEliminar = index;
+    alertaAntesDeEliminarFiltro();
   });
   return imagenBotonEliminar;
 }
+
+let indiceEliminar = null;
+const formularioEliminarFiltro = document.getElementById(
+  "formularioEliminarFiltro"
+);
+formularioEliminarFiltro.classList.add("oculto");
+
+function alertaAntesDeEliminarFiltro() {
+  formularioEliminarFiltro.classList.remove("oculto");
+  const pMensajeFiltroEliminar = document.getElementById(
+    "alertaEliminarFiltro"
+  );
+  pMensajeFiltroEliminar.textContent =
+    'El filtro "' +
+    filtros[indiceEliminar].nombre +
+    '" se eliminará de forma permanente y dejará de estar asociado a las tareas.';
+}
+
+// Capturo el evento del boton cancelar del formulario para eliminar un nuevo filtro
+document
+  .getElementById("desaparecerFormularioEliminarFiltro")
+  .addEventListener("click", function () {
+    formularioEliminarFiltro.classList.add("oculto");
+    indiceEliminar == null;
+  });
+
+// Capturo el evento del boton eleminar del formulario para eliminar un nuevo filtro
+document
+  .getElementById("eliminarFiltro")
+  .addEventListener("click", function (event) {
+    event.preventDefault();
+
+    if (indiceEliminar === null) return; // evita errores si no hay filtro seleccionado
+
+    const nombreFiltro = filtros[indiceEliminar].nombre;
+
+    // Eliminar el filtro del arreglo
+    filtros.splice(indiceEliminar, 1);
+
+    // Actualizar localStorage de filtros
+    localStorage.setItem("filtros", JSON.stringify(filtros));
+
+    // Actualizar las tareas que tenían ese filtro
+    tareas.forEach(function (tarea) {
+      if (tarea.filtro === nombreFiltro) {
+        tarea.filtro = ""; // deja vacío
+      }
+    });
+    localStorage.setItem("tareas", JSON.stringify(tareas));
+
+    // Volver a mostrar lista actualizada
+    mostrarFiltros(filtros);
+
+    // Resetear índice
+    indiceEliminar = null;
+
+    formularioEliminarFiltro.classList.add("oculto");
+  });
 
 // Función de crear el boton de editar
 function crearBotonEditar(filtro, index) {
@@ -217,6 +272,41 @@ document.getElementById("cerrarModal").addEventListener("click", function () {
 
 // ---------------------------------------- AÑADIR TAREA DESDE EL MENÚ ----------------------------------------------------------
 
+// Lógica de mostrar los filtros
+// Select para editar
+const selectFiltroEditar = document.getElementById(
+  "opcionesFiltrosNuevaTareaMenu"
+);
+
+var arregloFiltros = JSON.parse(localStorage.getItem("filtros")) || [];
+
+arregloFiltros.forEach(function (filtro) {
+  const opcion = document.createElement("option");
+
+  // El value se guarda limpio (solo el nombre)
+  opcion.value = filtro.nombre;
+
+  // El texto mostrado lleva emoji
+  switch (filtro.nombre) {
+    case "Prioridad 1":
+      opcion.textContent = "🔴 " + filtro.nombre;
+      break;
+    case "Prioridad 2":
+      opcion.textContent = "🟠 " + filtro.nombre;
+      break;
+    case "Prioridad 3":
+      opcion.textContent = "🔵 " + filtro.nombre;
+      break;
+    case "Prioridad 4":
+      opcion.textContent = "🟢 " + filtro.nombre;
+      break;
+    default:
+      opcion.textContent = filtro.nombre;
+  }
+
+  selectFiltroEditar.appendChild(opcion);
+});
+
 const formulatioAñadirTareaMenu = document.getElementById(
   "formulario-tareas-menu"
 );
@@ -263,8 +353,17 @@ function agregarNuevaTareaMenu(event) {
   ).value;
   // Obtengo el valor de la fecha de la tarea
   const fechaTarea = document.getElementById("fechaTareaMenu").value;
+  // Obtengo el valor del nombre del filtro aplicado
+  const nombreFiltro = document.getElementById(
+    "opcionesFiltrosNuevaTareaMenu"
+  ).value;
   // Creando un objeto Tarea con sus valores que requiere
-  const tarea = new Tarea(nombreTarea, descripcionTarea, fechaTarea);
+  const tarea = new Tarea(
+    nombreTarea,
+    descripcionTarea,
+    fechaTarea,
+    nombreFiltro
+  );
   // Agrego la nueva tarea(objeto) al arreglo tareas
   tareas.push(tarea);
   // Envio el arreglo tareas al localStorage con clave "tareas"
@@ -277,12 +376,100 @@ function agregarNuevaTareaMenu(event) {
 
 // Clase del objeto tarea
 class Tarea {
-  constructor(name, descripcion, fecha) {
+  constructor(name, descripcion, fecha, filtro) {
     this.name = name;
     this.descripcion = descripcion;
     this.fecha = fecha;
+    this.filtro = filtro;
   }
 }
 
 // Crea un arreglo tareas con los datos almacenados en la clave "tareas" del localStorage
 var tareas = JSON.parse(localStorage.getItem("tareas")) || [];
+
+// ✅ Validación de que la tarea tenga al menos el nombre antes agregar
+const inputNombreTareaMenu = document.getElementById("nombreTareaMenu");
+const btnAñadirNuevaTareaMenu = document.getElementById("nuevaTareaMenu");
+const formularioAñadirTareaMenu = document.querySelector(
+  "#formulario-tareas-menu form"
+);
+
+// función para activar/desactivar el botón
+function actualizarEstadoBoton() {
+  const vacio = inputNombreTareaMenu.value.trim() === "";
+  btnAñadirNuevaTareaMenu.disabled = vacio;
+  btnAñadirNuevaTareaMenu.classList.toggle("deshabilitado", vacio);
+}
+
+// Inicializar estado al cargar
+actualizarEstadoBoton();
+
+// escuchar input
+inputNombreTareaMenu.addEventListener("input", actualizarEstadoBoton);
+
+// interceptar envío del form
+formularioAñadirTareaMenu.addEventListener("submit", function (e) {
+  e.preventDefault();
+  if (btnAñadirNuevaTareaMenu.disabled) return; // seguridad extra
+  agregarNuevaTareaMenu();
+});
+
+// ✅ Validación de que el filtro tenga al menos el nombre antes AGREGAR
+const inputNombreFiltroNuevo = document.getElementById("nombreFiltro");
+const btnAñadirNuevoFiltro = document.getElementById("nuevoFiltro");
+const formularioAñadirFiltroValidación = document.querySelector(
+  "#formularioAñadirFiltro form"
+);
+
+// función para activar/desactivar el botón
+function actualizarEstadoBotonNuevoFiltro() {
+  const vacio = inputNombreFiltroNuevo.value.trim() === "";
+  btnAñadirNuevoFiltro.disabled = vacio;
+  btnAñadirNuevoFiltro.classList.toggle("deshabilitado", vacio);
+}
+
+// Inicializar estado al cargar
+actualizarEstadoBotonNuevoFiltro();
+
+// escuchar input
+inputNombreFiltroNuevo.addEventListener(
+  "input",
+  actualizarEstadoBotonNuevoFiltro
+);
+
+// interceptar envío del form
+formularioAñadirFiltroValidación.addEventListener("submit", function (e) {
+  e.preventDefault();
+  if (btnAñadirNuevoFiltro.disabled) return; // seguridad extra
+  agregarNuevoFiltro();
+});
+
+// ✅ Validación de que el filtro tenga al menos el nombre antes EDITAR
+const inputNombreFiltroEditado = document.getElementById("nombreFiltroEditar");
+const btnGuardarFiltroEditado = document.getElementById("guardarFiltro");
+const formularioEditarFiltroValidación = document.querySelector(
+  "#formularioEditarFiltro form"
+);
+
+// función para activar/desactivar el botón
+function actualizarEstadoBotonEditarFiltro() {
+  const vacio = inputNombreFiltroEditado.value.trim() === "";
+  btnGuardarFiltroEditado.disabled = vacio;
+  btnGuardarFiltroEditado.classList.toggle("deshabilitado", vacio);
+}
+
+// Inicializar estado al cargar
+actualizarEstadoBotonEditarFiltro();
+
+// escuchar input
+inputNombreFiltroEditado.addEventListener(
+  "input",
+  actualizarEstadoBotonEditarFiltro
+);
+
+// interceptar envío del form
+formularioEditarFiltroValidación.addEventListener("submit", function (e) {
+  e.preventDefault();
+  if (btnGuardarFiltroEditado.disabled) return; // seguridad extra
+  guardarFiltroEditado();
+});

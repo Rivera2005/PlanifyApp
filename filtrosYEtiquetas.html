@@ -115,6 +115,23 @@
                     </form>
                 </div>
             </div>
+            <!--Formulario de alerta para eliminar un filtro-->
+            <div class="modal" id="formularioEliminarFiltro">
+                <div class="modal-contenido">
+                    <span class="cerrar" id="cerrarModalEditando">&times;</span>
+                    <h3 style="margin-bottom: 10px;">¿Eliminar Filtro?</h3>
+                    <form id="formEtiqueta">
+                        <!-- Nombre -->
+                        <p id="alertaEliminarFiltro"></p>
+                        <!-- Botones -->
+                        <div class="acciones" id="accionesFiltros">
+                            <button type="button" class="cancelar"
+                                id="desaparecerFormularioEliminarFiltro">Cancelar</button>
+                            <button type="submit" class="añadir" id="eliminarFiltro">Eliminar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
             <!--Formulario de tarea desde el menú-->
             <div class="modal" id="formulario-tareas-menu">
                 <div class="formulario-tareas">
@@ -126,7 +143,11 @@
 
                         <div class="grupo-opciones">
                             <input type="date" id="fechaTareaMenu" name="fecha" placeholder="Fecha">
-                            <button type="button">⚑ Prioridad</button>
+                            <button type="button"><select id="opcionesFiltrosNuevaTareaMenu">
+                                    <option value="" disabled selected>🏳️ Prioridad</option>
+
+                                    <!--Aqui se mostraran los filtros creados-->
+                                </select></button>
                             <button type="button">⏰ Recordatorios</button>
                             <button type="button">⋯</button>
                         </div>

@@ -20,7 +20,10 @@ Con una interfaz intuitiva y herramientas flexibles, podrás gestionar tus pendi
 - 🔔 Recordatorios y notificaciones.  
 - 🌙 Modo oscuro.  
 - 📊 Estadísticas de productividad.  
-- ☁️ Sincronización en la nube.  
+- ☁️ Sincronización en la nube. 
+- Clasificar las tareas de Hoy (fecha actual)
+- Clasidicar las tareas Proximas (realizar un calendarii)
+- Clasificar las tareas qeu han vencido 
 
 ---
 
@@ -30,7 +33,3 @@ Con una interfaz intuitiva y herramientas flexibles, podrás gestionar tus pendi
 - **Frontend:** HTML 
 - **Backend:** JavaScript
 - **Base de datos:** LocalStorage / AsyncStorage (por ahora)  
-
----
-
-## 📲 Instalación y uso

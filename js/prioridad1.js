@@ -397,6 +397,41 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // ---------------------------------------- AÑADIR TAREA DESDE EL MENÚ ----------------------------------------------------------
 
+// Lógica de mostrar los filtros
+// Select para editar
+const selectFiltrosNuevaTareaMenu = document.getElementById(
+  "opcionesFiltrosNuevaTareaMenu"
+);
+
+var arregloFiltros = JSON.parse(localStorage.getItem("filtros")) || [];
+
+arregloFiltros.forEach(function (filtro) {
+  const opcion = document.createElement("option");
+
+  // El value se guarda limpio (solo el nombre)
+  opcion.value = filtro.nombre;
+
+  // El texto mostrado lleva emoji
+  switch (filtro.nombre) {
+    case "Prioridad 1":
+      opcion.textContent = "🔴 " + filtro.nombre;
+      break;
+    case "Prioridad 2":
+      opcion.textContent = "🟠 " + filtro.nombre;
+      break;
+    case "Prioridad 3":
+      opcion.textContent = "🔵 " + filtro.nombre;
+      break;
+    case "Prioridad 4":
+      opcion.textContent = "🟢 " + filtro.nombre;
+      break;
+    default:
+      opcion.textContent = filtro.nombre;
+  }
+
+  selectFiltrosNuevaTareaMenu.appendChild(opcion);
+});
+
 const formulatioAñadirTareaMenu = document.getElementById(
   "formulario-tareas-menu"
 );
@@ -437,14 +472,24 @@ function agregarNuevaTareaMenu(event) {
   event.preventDefault();
   // Obtengo el valor del nombre de la tarea
   const nombreTarea = document.getElementById("nombreTareaMenu").value;
+
   // Obtengo el valor de decripción de la tarea
   const descripcionTarea = document.getElementById(
     "descripcionTareaMenu"
   ).value;
   // Obtengo el valor de la fecha de la tarea
   const fechaTarea = document.getElementById("fechaTareaMenu").value;
+  // Obtengo el valor del nombre del filtro aplicado
+  const nombreFiltro = document.getElementById(
+    "opcionesFiltrosNuevaTareaMenu"
+  ).value;
   // Creando un objeto Tarea con sus valores que requiere
-  const tarea = new Tarea(nombreTarea, descripcionTarea, fechaTarea);
+  const tarea = new Tarea(
+    nombreTarea,
+    descripcionTarea,
+    fechaTarea,
+    nombreFiltro
+  );
   // Agrego la nueva tarea(objeto) al arreglo tareas
   tareas.push(tarea);
   // Envio el arreglo tareas al localStorage con clave "tareas"
@@ -457,12 +502,39 @@ function agregarNuevaTareaMenu(event) {
 
 // Clase del objeto tarea
 class Tarea {
-  constructor(name, descripcion, fecha) {
+  constructor(name, descripcion, fecha, filtro) {
     this.name = name;
     this.descripcion = descripcion;
     this.fecha = fecha;
+    this.filtro = filtro;
   }
 }
 
 // Crea un arreglo tareas con los datos almacenados en la clave "tareas" del localStorage
 var tareas = JSON.parse(localStorage.getItem("tareas")) || [];
+
+// ✅ Validación de que la tarea tenga al menos el nombre antes agregar
+const inputNombreTareaMenu = document.getElementById("nombreTareaMenu");
+const btnAñadirNuevaTareaMenu = document.getElementById("nuevaTareaMenu");
+const formularioAñadirTareaMenu = document.querySelector("#formulario-tareas-menu form");
+
+// función para activar/desactivar el botón
+function actualizarEstadoBoton() {
+  const vacio = inputNombreTareaMenu.value.trim() === "";
+  btnAñadirNuevaTareaMenu.disabled = vacio;
+  btnAñadirNuevaTareaMenu.classList.toggle("deshabilitado", vacio);
+}
+
+// Inicializar estado al cargar
+actualizarEstadoBoton();
+
+// escuchar input
+inputNombreTareaMenu.addEventListener("input", actualizarEstadoBoton);
+
+// interceptar envío del form
+formularioAñadirTareaMenu.addEventListener("submit", function (e) {
+  e.preventDefault();
+  if (btnAñadirNuevaTareaMenu.disabled) return; // seguridad extra
+  agregarNuevaTareaMenu();
+});
+

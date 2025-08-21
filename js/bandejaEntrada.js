@@ -58,6 +58,8 @@ function agregarNuevaTarea(event) {
   // LLamo a la función mostrar tareas y le paso el arreglo tareas que contiene la tarea(objeto)
   mostrarTareas(tareas);
   h1bandejaEntrada.classList.remove("oculto");
+  // 👇 Forzar validación otra vez
+  actualizarEstadoBoton();
 }
 
 //Función para limpiar los input del formulario de Nueva Tarea
@@ -426,6 +428,8 @@ document
   .getElementById("añadirtareaoculto")
   .addEventListener("click", function () {
     formulario.classList.remove("oculto");
+    // 👇 Forzar validación otra vez
+    actualizarEstadoBoton();
     añadirtareaoculto.classList.add("oculto");
   });
 
@@ -482,4 +486,54 @@ arregloFiltros.forEach(function (filtro) {
   opcionFiltrosEditarTarea.value = filtro.nombre; // limpio
   opcionFiltrosEditarTarea.textContent = getTextoConEmoji(filtro.nombre);
   selectFiltroEditar.appendChild(opcionFiltrosEditarTarea);
+});
+
+// ✅ Validación de que la tarea tenga al menos el nombre antes agregar
+const inputNombreTarea = document.getElementById("nombreTarea");
+const btnAñadirNuevaTarea = document.getElementById("nuevaTarea");
+const formularioAñadirTarea = document.querySelector("#formulario-tareas form");
+
+// función para activar/desactivar el botón
+function actualizarEstadoBoton() {
+  const vacio = inputNombreTarea.value.trim() === "";
+  btnAñadirNuevaTarea.disabled = vacio;
+  btnAñadirNuevaTarea.classList.toggle("deshabilitado", vacio);
+}
+
+// Inicializar estado al cargar
+actualizarEstadoBoton();
+
+// escuchar input
+inputNombreTarea.addEventListener("input", actualizarEstadoBoton);
+
+// interceptar envío del form
+formularioAñadirTarea.addEventListener("submit", function (e) {
+  e.preventDefault();
+  if (btnAñadirNuevaTarea.disabled) return; // seguridad extra
+  agregarNuevaTarea();
+});
+
+// ✅ Validación de que la tarea tenga al menos el nombre antes EDITAR
+const inputNombreTareaEditar = document.getElementById("nombreTareaEditar");
+const btnGuardarTareaEditada = document.getElementById("guardarTarea");
+const formularioEditarTareaValidación = document.querySelector("#formulario-tareas-editar form");
+
+// función para activar/desactivar el botón
+function actualizarEstadoBotonEditarTarea() {
+  const vacio = inputNombreTareaEditar.value.trim() === "";
+  btnGuardarTareaEditada.disabled = vacio;
+  btnGuardarTareaEditada.classList.toggle("deshabilitado", vacio);
+}
+
+// Inicializar estado al cargar
+actualizarEstadoBotonEditarTarea();
+
+// escuchar input
+inputNombreTareaEditar.addEventListener("input", actualizarEstadoBotonEditarTarea);
+
+// interceptar envío del form
+formularioEditarTareaValidación.addEventListener("submit", function (e) {
+  e.preventDefault();
+  if (btnGuardarTareaEditada.disabled) return; // seguridad extra
+  guardarTareaEditada();
 });
