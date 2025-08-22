@@ -1,32 +1,29 @@
-// Clase del objeto tarea
+// Clase del objeto filtro
 class Filtro {
   constructor(nombre) {
     this.nombre = nombre;
   }
 }
-
-// Crea un arreglo tareas con los datos almacenados en la clave "tareas" del localStorage
+// Crea un arreglo filtros con los datos almacenados en la clave "filtros" del localStorage
 var filtros = JSON.parse(localStorage.getItem("filtros")) || [];
-// indice del array que quiero editar
+// indice del elemento del array que quiero editar
 let indiceEditandoFiltro = null;
-
-// Obtengo el evento de agregar una nueva tarea que es el boton de la bandeja de entrada
+// Obtengo el evento de agregar un nuevo filtro que es el boton de añadir
 document
   .getElementById("nuevoFiltro")
   .addEventListener("click", agregarNuevoFiltro);
-// Captura el evento para guardar una tarea que fue editada
+// Captura el evento para guardar un filtro que fue editado
 document
   .getElementById("guardarFiltro")
   .addEventListener("click", guardarFiltroEditado);
-// Captura del evento para cancelar el formulario de editar
+// Captura del evento para cancelar el formulario de editar un filtro
 document
   .getElementById("desaparecerFormularioEditarFiltro")
   .addEventListener("click", cancelarEdicion);
-// Captura del evento para cancelar el formulario de editar (X)
+// Captura del evento para cancelar el formulario de editar, el boton de (X)
 document
   .getElementById("cerrarModalEditando")
   .addEventListener("click", cancelarEdicion);
-
 // Función para agregar un nuevo fitro, recolecta los datos de los input
 // Crear un objeto con los datos recolectados y los agregar al arreglo filtros
 // Por ultimo envia al arreglo al localStorage con la clave "filtros"
@@ -45,47 +42,43 @@ function agregarNuevoFiltro(event) {
   // LLamo a la función mostrar tareas y le paso el arreglo tareas que contiene la tarea(objeto)
   mostrarFiltros(filtros);
 }
-
-//Función para limpiar los input del formulario de Nueva Tarea
+//Función para limpiar los input del formulario de Nuevo Filtro
 function limpiarFormularioNuevoFiltro() {
   document.getElementById("nombreFiltro").value = "";
 }
-
-// Función para Mostrarlas en la interfaz
-// Creo un elmento con create element y lo paso al padre que es listaTareas que es un UL en el HTML
+// Función para mostrar los filtros en la interfaz
+// Creo un elmento con create element y lo paso al padre que es listaFiltros que es un UL en el HTML
 function mostrarFiltros(arregloFiltros) {
   const listaFiltros = document.getElementById("listaFiltros");
   listaFiltros.innerHTML = ""; // Limpiar lista antes de mostrar
-  //Recorro cada elemento del arreglo, los parametros function(tarea, index)
-  // filtro es cada elemento dentro del arreglo, y el index es la posición del elemento en el arreglo
+  //Recorro cada elemento del arreglo, los parametros function(filtro, index)
+  //filtro es cada elemento dentro del arreglo, y el index es la posición del elemento en el arreglo
   arregloFiltros.forEach(function (filtro, index) {
     listaFiltros.appendChild(crearElementoFiltro(filtro, index));
   });
-  // Actualizar la interfaz si esta vacio o si no esta vacio el arreglo de lista de tareas
+  // Actualizar la interfaz si esta vacio o si no esta vacio el arreglo de lista de filtros
   if (!arregloFiltros.length) {
     formularioAñadirFiltro.classList.remove("oculto");
   } else {
     formularioAñadirFiltro.classList.add("oculto");
   }
 }
-
 // Función para crear el Elemento Filtro que es li con los botones
 // Esta función llama a otros funciones que crean los botones de editar y completar
-// Recibe 2 parametros tarea (es cada elemento del array) y el index que es el numero de index del objeto del array
+// Recibe 2 parametros filtro (es cada elemento del array) y el index que es el numero de index del objeto del array
 function crearElementoFiltro(filtro, index) {
   // Creo el elemento li para la nueva tarea, se le asigna una clase de css
   const nuevoFiltro = document.createElement("li");
   nuevoFiltro.className = "claseTareas";
-  // Crear un P para mostrar el nombre del filtro
+  // Crear un P para mostrar el nombre del filtro y se le asigna una clase css
   const nombreFiltroP = document.createElement("p");
   nombreFiltroP.textContent = filtro.nombre;
   nombreFiltroP.className = "filtroSeleccionar";
-  // 👉 Evento click en el nombre del filtro
+  // Captura del evento que te redirige a una nueva pagina en la que te muestra las tareas del filtro seleccionado
   nombreFiltroP.addEventListener("click", function () {
     // Guardar el filtro seleccionado en el localStorage
     localStorage.setItem("filtroSeleccionado", filtro.nombre);
-
-    // Redirigir a la página donde mostrarás las tareas filtradas
+    // Redirigir a la página donde mostrará las tareas filtradas
     window.location.href = "tareasFiltradas.html";
   });
   // Creo elemento imagen que acompaña a la fecha (calendario)
@@ -124,19 +117,22 @@ function crearBotonEliminar(index) {
   imagenBotonEliminar.addEventListener("click", function () {
     // Eliminar del array el elemento indicado, el index viene de la funcion mostrarLista -> crearElementoFiltro
     indiceEliminar = index;
+    // Lllamado a la función que muestra el formulario para preguntarle al usuario si desea eliminar el filtro
     alertaAntesDeEliminarFiltro();
   });
   return imagenBotonEliminar;
 }
-
+// Indice para ver que filtro quiere eliminar el usuario
 let indiceEliminar = null;
+// Capturamos el formulario para preguntarle al usuario si esta seguro de eliminar el filtro
 const formularioEliminarFiltro = document.getElementById(
   "formularioEliminarFiltro"
 );
 formularioEliminarFiltro.classList.add("oculto");
-
+// Función que muestra el formulario para preguntarle al usuario si desea eliminar el filtro
 function alertaAntesDeEliminarFiltro() {
   formularioEliminarFiltro.classList.remove("oculto");
+  // Asignamos el nombre del filtro que se desea eliminar al mensaje
   const pMensajeFiltroEliminar = document.getElementById(
     "alertaEliminarFiltro"
   );
@@ -145,7 +141,6 @@ function alertaAntesDeEliminarFiltro() {
     filtros[indiceEliminar].nombre +
     '" se eliminará de forma permanente y dejará de estar asociado a las tareas.';
 }
-
 // Capturo el evento del boton cancelar del formulario para eliminar un nuevo filtro
 document
   .getElementById("desaparecerFormularioEliminarFiltro")
@@ -153,23 +148,17 @@ document
     formularioEliminarFiltro.classList.add("oculto");
     indiceEliminar == null;
   });
-
 // Capturo el evento del boton eleminar del formulario para eliminar un nuevo filtro
 document
   .getElementById("eliminarFiltro")
   .addEventListener("click", function (event) {
     event.preventDefault();
-
     if (indiceEliminar === null) return; // evita errores si no hay filtro seleccionado
-
     const nombreFiltro = filtros[indiceEliminar].nombre;
-
     // Eliminar el filtro del arreglo
     filtros.splice(indiceEliminar, 1);
-
     // Actualizar localStorage de filtros
     localStorage.setItem("filtros", JSON.stringify(filtros));
-
     // Actualizar las tareas que tenían ese filtro
     tareas.forEach(function (tarea) {
       if (tarea.filtro === nombreFiltro) {
@@ -177,29 +166,25 @@ document
       }
     });
     localStorage.setItem("tareas", JSON.stringify(tareas));
-
     // Volver a mostrar lista actualizada
     mostrarFiltros(filtros);
-
     // Resetear índice
     indiceEliminar = null;
-
     formularioEliminarFiltro.classList.add("oculto");
   });
-
 // Función de crear el boton de editar
 function crearBotonEditar(filtro, index) {
   const imagenBotonEditar = document.createElement("img");
   imagenBotonEditar.src =
     "https://cdn-icons-png.flaticon.com/512/4103/4103111.png ";
   imagenBotonEditar.className = "imagenesBotones";
-  //Función de Editar Tareas
+  //Función de Editar Filtro
   imagenBotonEditar.addEventListener("click", function () {
     //ocultar el formulario de crear
     formularioAñadirFiltro.classList.add("oculto");
     //mostar el formulario de editar
     formularioEditarFiltro.classList.remove("oculto");
-    // Asigno al indice Editando el index que viene de cuando hacemos click al boton de editar, para ocuparlo en otra función, este viende de la funcion MostrarLista -> CrearElementoLista
+    // Asigno al indice Editando el index que viene de cuando hacemos click al boton de editar, para ocuparlo en otra función, este viende de la funcion MostrarLista -> CrearElementoFiltro
     indiceEditandoFiltro = index;
     // Le asigno al input del formulario Editar el nombre de la tarea que seleccione para editar, y esa tarea viene del objeto que se le paso a esta funcion
     document.getElementById("nombreFiltroEditar").value = filtro.nombre;
@@ -207,12 +192,11 @@ function crearBotonEditar(filtro, index) {
   });
   return imagenBotonEditar;
 }
-
+// Función que se activa cuando se da click en el boton de cancelar en el formulario de editar un filtro
 function cancelarEdicion() {
   formularioEditarFiltro.classList.add("oculto");
   indiceEditandoFiltro = null; // Como se cancela la edicion borrar el indice que se guardo;
 }
-
 // Función que guarda el filtro que se ha editado
 function guardarFiltroEditado(event) {
   event.preventDefault();
@@ -222,13 +206,12 @@ function guardarFiltroEditado(event) {
       document.getElementById("nombreFiltroEditar").value;
     filtros[indiceEditandoFiltro].nombre = nombreFiltroEditado;
     formularioEditarFiltro.classList.add("oculto");
-    // Como se acaba de editar un objeto del arreglo tareas, lo envio de nuevo al LocalStorage para que se actualice
+    // Como se acaba de editar un objeto del arreglo filtros, lo envio de nuevo al LocalStorage para que se actualice
     localStorage.setItem("filtros", JSON.stringify(filtros));
     mostrarFiltros(filtros); // Vuelvo a mostrar la lista actualizada
     indiceEditandoFiltro = null; // Como ya se edito, volver a dejar el indice del arreglo null para otras ediciones
   }
 }
-
 // Logico de ocultar y mostrar elementos de la interfaz
 const formularioAñadirFiltro = document.getElementById(
   "formularioAñadirFiltro"
@@ -236,35 +219,30 @@ const formularioAñadirFiltro = document.getElementById(
 const formularioEditarFiltro = document.getElementById(
   "formularioEditarFiltro"
 );
-
 const h1FiltrosyEtiquetas = document.getElementById("h1FiltrosyEtiquetas");
-
 formularioAñadirFiltro.classList.add("oculto");
 formularioEditarFiltro.classList.add("oculto");
-
-// Capturo el evento del boton cancelar del formulario para añadir una nueva tarea
+// Capturo el evento del boton cancelar del formulario para añadir un nuevo filtro
 document
   .getElementById("desaparecerFormularioNuevoFiltro")
   .addEventListener("click", function () {
     formularioAñadirFiltro.classList.add("oculto");
     limpiarFormularioNuevoFiltro();
   });
-
-// Capturo el evento del boton añadir tarea que aparece al finalizar la lista de tareas
+// Capturo el evento del boton añadir filtro que aparece como el simbolo +
 document
   .getElementById("añadirfiltroaoculto")
   .addEventListener("click", function () {
     formularioAñadirFiltro.classList.remove("oculto");
   });
-
-// Verificación inicial, por si hay tareas en el LocalStorage
+// Verificación inicial, por si hay filtros en el LocalStorage
 if (filtros.length !== 0) {
   document.addEventListener("DOMContentLoaded", () => mostrarFiltros(filtros));
   h1FiltrosyEtiquetas.classList.remove("oculto");
 } else {
   //bandejaEntrada.classList.remove("oculto");
 }
-
+// Captura el evento del boton (x) del formulario para añadir un nuevo filtro
 document.getElementById("cerrarModal").addEventListener("click", function () {
   formularioAñadirFiltro.classList.add("oculto");
   limpiarFormularioNuevoFiltro();

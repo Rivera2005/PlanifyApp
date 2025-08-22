@@ -65,7 +65,6 @@ function mostrarTareasCompletadas(arregloTareas) {
     listaTareasCompletadas.appendChild(ulGrupo);
   });
 }
-
 // Crea el elemento tarea
 function crearElementoTareaCompletada(tarea) {
   // Creo el elemento li para la nueva tarea, se le asigna una clase de css
@@ -317,7 +316,7 @@ class Tarea {
 // Crea un arreglo tareas con los datos almacenados en la clave "tareas" del localStorage
 var tareas = JSON.parse(localStorage.getItem("tareas")) || [];
 
-// ✅ Validación de que la tarea tenga al menos el nombre antes agregar
+// ---------------------------✅ Validación de que la tarea tenga al menos el nombre antes agregar-------------------
 const inputNombreTareaMenu = document.getElementById("nombreTareaMenu");
 const btnAñadirNuevaTareaMenu = document.getElementById("nuevaTareaMenu");
 const formularioAñadirTareaMenu = document.querySelector(

@@ -7,7 +7,6 @@ class Tarea {
     this.filtro = filtro;
   }
 }
-
 // Crea un arreglo tareas con los datos almacenados en la clave "tareas" del localStorage
 var tareas = JSON.parse(localStorage.getItem("tareas")) || [];
 // Crear un arreglo de las tareas completadas con los datos en la clave "tareasCompletadas" del localStorage
@@ -15,7 +14,6 @@ var tareasCompletadasArreglo =
   JSON.parse(localStorage.getItem("tareasCompletadas")) || [];
 // indice del array que quiero editar
 let indiceEditando = null;
-
 // Obtengo el evento de agregar una nueva tarea que es el boton de la bandeja de entrada
 document
   .getElementById("nuevaTarea")
@@ -58,7 +56,7 @@ function agregarNuevaTarea(event) {
   // LLamo a la función mostrar tareas y le paso el arreglo tareas que contiene la tarea(objeto)
   mostrarTareas(tareas);
   h1bandejaEntrada.classList.remove("oculto");
-  // 👇 Forzar validación otra vez
+  // Llamo a la función que me permite hacer la validación antes de agregar una nueva tarea
   actualizarEstadoBoton();
 }
 
@@ -70,8 +68,8 @@ function limpiarFormularioNuevaTarea() {
   document.getElementById("opcionesFiltros").value = "";
 }
 
-// Función para Mostrarlas en la interfaz
-// Creo un elmento con create element y lo paso al padre que es listaTareas que es un UL en el HTML
+// Función para mostrar las tareas en la interfaz
+// Creo un elemento con create element y lo paso al padre que es listaTareas que es un UL en el HTML
 function mostrarTareas(arregloTareas) {
   const listaTareas = document.getElementById("listaTareas");
   listaTareas.innerHTML = ""; // Limpiar lista antes de mostrar
@@ -96,61 +94,65 @@ function mostrarTareas(arregloTareas) {
 }
 
 // Función para crear el Elemento Tarea que es li con los botones
-// Esta función llama a otros funciones que crean los botones de editar y completar
+// Esta función llama a otros funciones que crean los botones de editar y completar, también llama a función que crea un div para juntar una imagen y un texto
 // Recibe 2 parametros tarea (es cada elemento del array) y el index que es el numero de index del objeto del array
 function crearElementoTarea(tarea, index) {
   // Creo el elemento li para la nueva tarea, se le asigna una clase de css
   const nuevaTarea = document.createElement("li");
   nuevaTarea.className = "claseTareas";
-  // Creo un div en el que ira el nombre y fecha de la tarea, cada uno con un div
+  // Creo un div en el que ira el nombre, fecha de la tarea y filtro aplicado cada uno con un div
   const contenedorTarea = document.createElement("div");
   contenedorTarea.className = "contenedorListaTarea";
   // Crear un P para mostrar el nombre de la tarea
   const nombreTareaP = document.createElement("p");
   nombreTareaP.textContent = tarea.name;
-  // Crear un P para mostar la descripción de la tarea
+  // uno el nombre de la tarea al div creado
+  contenedorTarea.appendChild(nombreTareaP);
+  // Crear un P para mostar la descripción de la tarea y se le asigna una clase css
   const descripcionTareaP = document.createElement("p");
   descripcionTareaP.textContent = tarea.descripcion;
   descripcionTareaP.className = "fechaTarea";
+  // Validación para agregar el elemento (hijo) p que contiene la descripción de la tarea al padre (div)
+  if (tarea.descripcion) {
+    // Si el elemento tarea tiene descricipción se une al div creado
+    contenedorTarea.appendChild(descripcionTareaP);
+  }
+  // Como crearemos 2 div que une imagen + texto
+  // Creamos un div para alamacenar esos 2 div y mostrar como un flex en una sola fila
+  const divContenedorFechaFiltro = document.createElement("div");
+  divContenedorFechaFiltro.className = "acciones";
   // Llamo a la función que me va a dar el un nuevo formato para mostrar la fecha
   const fechaAMostrar = nuevoFormatoFechaTarea(tarea.fecha);
   // Llamo a la función que me dara el final, que es con el nuevo formato y el color correspondiente de acuerdo a la fecha
-  const fechaConColor = colorFechaMostrar(fechaAMostrar);
-  // Creo un div(flex) para unir la imagen y la fecha
+  const fechaConColor = colorFechaMostrar(fechaAMostrar); // Me devuelve un elemento p
+  // Creo un div(flex) para unir la imagen y la fecha, llamado a la función que crea el div, con parametros (url, elemento)
   const divFechaImagenTarea = crearElementoConIcono(
     "https://cdn-icons-png.flaticon.com/512/661/661512.png",
     fechaConColor
   );
-  // uno los elementos hijos (nombre y fecha) al padre (div que los contiene)
-  contenedorTarea.appendChild(nombreTareaP);
-  if (tarea.descripcion) {
-    contenedorTarea.appendChild(descripcionTareaP);
+  // Validación para agregar el elemento (hijo) div que contiene la imagen(calendario) y el texto(fecha) al padre (div)
+  if (tarea.fecha) {
+    divContenedorFechaFiltro.appendChild(divFechaImagenTarea);
   }
-  // Crear elemento para mostrar el nombre del filtro
+  // Crear un P para mostrar el nombre del filtro y se le asiga un css
   const pNombreFiltro = document.createElement("p");
   pNombreFiltro.textContent = tarea.filtro;
   pNombreFiltro.className = "fechaTarea";
+  // Llamado a la función para decidir el color del texto (depende de que filtro tenga la tarea)
   const nombreFiltro = colorNombreFiltro(pNombreFiltro);
-  // Creo un div(flex) para unir imagen y nombre del filtro
+  // Creo un div(flex) para unir la imagen y el nombre del filtro, llamado a la función que crea el div, con parametros (url, elemento)
   const divFiltroImagenTarea = crearElementoConIcono(
     "https://cdn-icons-png.flaticon.com/512/10406/10406997.png",
     nombreFiltro
   );
-  // Div para hacerlo flex y unir los div de icono más nombre
-  const divContenedorFechaFiltro = document.createElement("div");
-  divContenedorFechaFiltro.className = "acciones";
-  // condicional, el de mostar o no fecha (ayuda al estilo)
-  if (tarea.fecha) {
-    divContenedorFechaFiltro.appendChild(divFechaImagenTarea);
-  }
-  // condicional, el de mostar o el filtro (ayuda al estilo)
+  // Validación si la tarea tiene filtro, entonces agregar el elmento hijo al padre
   if (tarea.filtro) {
     divContenedorFechaFiltro.appendChild(divFiltroImagenTarea);
   }
+  // Validación si el div que contiene los div que une imagen + texto esta vacio o no, para unir el elemento hijo al padre
   if (divContenedorFechaFiltro.children.length > 0) {
     contenedorTarea.appendChild(divContenedorFechaFiltro);
   }
-
   // Crea el div donde van a estar los botones de completar y editar, y se les asigna una clase de css
   const divBotones = document.createElement("div");
   divBotones.className = "divBotones";
@@ -166,10 +168,9 @@ function crearElementoTarea(tarea, index) {
   // retornamos el elemento li con todo sus propiedades
   return nuevaTarea;
 }
-
+// Función que asigna clase(diferentes colores de texto), para el texto de filtro en el elemento tarea
 function colorNombreFiltro(nombreFiltro, index) {
   const tipoFiltro = nombreFiltro.textContent;
-
   if (tipoFiltro == "Prioridad 1") {
     nombreFiltro.classList.add("prioridad1");
   } else if (tipoFiltro == "Prioridad 2") {
@@ -179,10 +180,8 @@ function colorNombreFiltro(nombreFiltro, index) {
   } else if (tipoFiltro == "Prioridad 4") {
     nombreFiltro.classList.add("prioridad4");
   }
-
   return nombreFiltro;
 }
-
 // Función para el div que lleva la imagen y un nombre a la par como Fecha (imagen de calendario y el texto de la fecha)
 function crearElementoConIcono(src, texto, claseTexto) {
   const img = document.createElement("img");
@@ -192,10 +191,8 @@ function crearElementoConIcono(src, texto, claseTexto) {
   div.className = "imagenytextofecha";
   div.appendChild(img);
   div.appendChild(texto);
-
   return div;
 }
-
 //Función para personalizar el formato de la fecha
 function nuevoFormatoFechaTarea(fecha) {
   const [anioSeleccionado, mesSeleccionado, diaSeleccionado] = fecha
@@ -271,7 +268,6 @@ function nuevoFormatoFechaTarea(fecha) {
   // Mayúscula inicial
   return textoFecha.charAt(0).toUpperCase() + textoFecha.slice(1);
 }
-
 // Función que dependiendo del retorno de la función nuevoFormatoFechaTarea, me dara un color para el p u otro
 function colorFechaMostrar(textoFecha) {
   const p = document.createElement("p");
@@ -294,7 +290,6 @@ function colorFechaMostrar(textoFecha) {
   }
   return p;
 }
-
 // Función para crear el boton de completar, crea el elemento y además la función del botón
 function crearBotonCompletar(index, nombreFiltro) {
   const BotonCompletado = document.createElement("input");
@@ -320,7 +315,7 @@ function crearBotonCompletar(index, nombreFiltro) {
 
   const tipoFiltro = nombreFiltro.textContent;
 
-  // Asignar estilo según la prioridad
+  // Asignar estilo según la prioridad, cambio el color del border del input radio
   if (tipoFiltro === "Prioridad 1") {
     BotonCompletado.classList.add("prioridad1-radio");
   } else if (tipoFiltro === "Prioridad 2") {
@@ -356,6 +351,7 @@ function crearBotonEditar(tarea, index) {
   return imagenBotonEditar;
 }
 
+// Función que se activa cuando se da click en el boton de cancelar en el formulario de editar una tarea
 function cancelarEdicion() {
   formularioEditar.classList.add("oculto");
   indiceEditando = null; // Como se cancela la edicion borrar el indice que se guardo;
@@ -428,7 +424,7 @@ document
   .getElementById("añadirtareaoculto")
   .addEventListener("click", function () {
     formulario.classList.remove("oculto");
-    // 👇 Forzar validación otra vez
+    // Llamado a la función que me ayuda con la validación al momento de crear una nueva tarea
     actualizarEstadoBoton();
     añadirtareaoculto.classList.add("oculto");
   });
@@ -452,7 +448,7 @@ if (tareas.length !== 0) {
   bandejaEntrada.classList.remove("oculto");
 }
 
-// Lógica de mostrar los filtros
+// Lógica de mostrar los filtros en los formularios tanto de crear una nueva tarea como de editarla
 const selectFiltro = document.getElementById("opcionesFiltros");
 const selectFiltroEditar = document.getElementById("opcionesFiltrosEditar");
 
@@ -488,7 +484,7 @@ arregloFiltros.forEach(function (filtro) {
   selectFiltroEditar.appendChild(opcionFiltrosEditarTarea);
 });
 
-// ✅ Validación de que la tarea tenga al menos el nombre antes agregar
+// -------------------------✅ Validación de que la tarea tenga al menos el nombre antes agregar---------------------------
 const inputNombreTarea = document.getElementById("nombreTarea");
 const btnAñadirNuevaTarea = document.getElementById("nuevaTarea");
 const formularioAñadirTarea = document.querySelector("#formulario-tareas form");
@@ -513,10 +509,12 @@ formularioAñadirTarea.addEventListener("submit", function (e) {
   agregarNuevaTarea();
 });
 
-// ✅ Validación de que la tarea tenga al menos el nombre antes EDITAR
+// -------------------------✅ Validación de que la tarea tenga al menos el nombre antes EDITAR-------------------------
 const inputNombreTareaEditar = document.getElementById("nombreTareaEditar");
 const btnGuardarTareaEditada = document.getElementById("guardarTarea");
-const formularioEditarTareaValidación = document.querySelector("#formulario-tareas-editar form");
+const formularioEditarTareaValidación = document.querySelector(
+  "#formulario-tareas-editar form"
+);
 
 // función para activar/desactivar el botón
 function actualizarEstadoBotonEditarTarea() {
@@ -529,7 +527,10 @@ function actualizarEstadoBotonEditarTarea() {
 actualizarEstadoBotonEditarTarea();
 
 // escuchar input
-inputNombreTareaEditar.addEventListener("input", actualizarEstadoBotonEditarTarea);
+inputNombreTareaEditar.addEventListener(
+  "input",
+  actualizarEstadoBotonEditarTarea
+);
 
 // interceptar envío del form
 formularioEditarTareaValidación.addEventListener("submit", function (e) {
