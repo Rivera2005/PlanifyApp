@@ -1,8 +1,3 @@
-// Crea un arreglo tareas con los datos almacenados en la clave "tareas" del localStorage
-var tareas = JSON.parse(localStorage.getItem("tareas")) || [];
-// Crear un arreglo de las tareas completadas con los datos en la clave "tareasCompletadas" del localStorage
-var tareasCompletadasArreglo =
-  JSON.parse(localStorage.getItem("tareasCompletadas")) || [];
 // indice del array que quiero editar
 let indiceEditando = null;
 // Captura el evento para guardar una tarea que fue editada
@@ -13,26 +8,46 @@ document
 document
   .getElementById("desaparecerFormularioEditar")
   .addEventListener("click", cancelarEdicion);
+// Crear un arreglo de las tareas completadas con los datos en la clave "tareasCompletadas" del localStorage
+var tareasCompletadasArreglo =
+  JSON.parse(localStorage.getItem("tareasCompletadas")) || [];
+// Captura el evento de cargar el DOM y llama a la función que mostrará las tareas de HOY
+document.addEventListener("DOMContentLoaded", tareasHoy);
 
-// Función para Mostrarlas en la interfaz
-// Creo un elmento con create element y lo paso al padre que es listaTareas que es un UL en el HTML
-function mostrarTareas(arregloTareas) {
-  const listaTareas = document.getElementById("listaTareas");
-  listaTareas.innerHTML = ""; // Limpiar lista antes de mostrar
-  //Recorro cada elemento del arreglo, los parametros function(tarea, index)
-  // tarea es cada elemento dentro del arreglo, y el index es la posición del elemento en el arreglo
-  arregloTareas.forEach(function (tarea, index) {
-    listaTareas.appendChild(crearElementoTarea(tarea, index));
-  });
-  // Actualizar la interfaz si esta vacio o si no esta vacio el arreglo de lista de tareas
-  if (!arregloTareas.length) {
-    bandejaEntrada.classList.remove("oculto");
-    h1bandejaEntrada.classList.add("oculto");
-  } else {
-    bandejaEntrada.classList.add("oculto");
-    h1bandejaEntrada.classList.remove("oculto");
-  }
+// Función que se llama al cargar el DOM que filtra las tareas del día HOY
+function tareasHoy(event) {
+  event.preventDefault();
+  const tareas = JSON.parse(localStorage.getItem("tareas")) || [];
+  mostrarTareasHoy(tareas);
 }
+
+// Función que muestra solo las tareas del día HOY
+function mostrarTareasHoy(arregloTareas) {
+  const listaTareasHoy = document.getElementById("listaTareasHoy");
+  listaTareasHoy.innerHTML = ""; // Limpiar lista antes de mostrar
+
+  // Obtener fecha de HOY en formato YYYY-MM-DD
+  const hoy = new Date();
+  const fechaHoy = `${hoy.getFullYear()}-${(hoy.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}-${hoy.getDate().toString().padStart(2, "0")}`;
+
+  // Filtrar tareas cuya fecha === hoy
+  const tareasDeHoy = arregloTareas.filter((tarea) => tarea.fecha === fechaHoy);
+
+  if (tareasDeHoy.length === 0) {
+    const mensaje = document.createElement("p");
+    mensaje.textContent = "No hay tareas asignadas para hoy.";
+    mensaje.className = "mensajeVacio";
+    listaTareasHoy.appendChild(mensaje);
+    return;
+  }
+
+  tareasDeHoy.forEach((tarea, index) => {
+    listaTareasHoy.appendChild(crearElementoTarea(tarea, index));
+  });
+}
+
 // Función para crear el Elemento Tarea que es li con los botones
 // Esta función llama a otros funciones que crean los botones de editar y completar, también llama a función que crea un div para juntar una imagen y un texto
 // Recibe 2 parametros tarea (es cada elemento del array) y el index que es el numero de index del objeto del array
@@ -57,23 +72,6 @@ function crearElementoTarea(tarea, index) {
     // Si el elemento tarea tiene descricipción se une al div creado
     contenedorTarea.appendChild(descripcionTareaP);
   }
-  // Como crearemos 2 div que une imagen + texto
-  // Creamos un div para alamacenar esos 2 div y mostrar como un flex en una sola fila
-  const divContenedorFechaFiltro = document.createElement("div");
-  divContenedorFechaFiltro.className = "acciones";
-  // Llamo a la función que me va a dar el un nuevo formato para mostrar la fecha
-  const fechaAMostrar = nuevoFormatoFechaTarea(tarea.fecha);
-  // Llamo a la función que me dara el final, que es con el nuevo formato y el color correspondiente de acuerdo a la fecha
-  const fechaConColor = colorFechaMostrar(fechaAMostrar); // Me devuelve un elemento p
-  // Creo un div(flex) para unir la imagen y la fecha, llamado a la función que crea el div, con parametros (url, elemento)
-  const divFechaImagenTarea = crearElementoConIcono(
-    "https://cdn-icons-png.flaticon.com/512/661/661512.png",
-    fechaConColor
-  );
-  // Validación para agregar el elemento (hijo) div que contiene la imagen(calendario) y el texto(fecha) al padre (div)
-  if (tarea.fecha) {
-    divContenedorFechaFiltro.appendChild(divFechaImagenTarea);
-  }
   // Crear un P para mostrar el nombre del filtro y se le asiga un css
   const pNombreFiltro = document.createElement("p");
   pNombreFiltro.textContent = tarea.filtro;
@@ -87,11 +85,7 @@ function crearElementoTarea(tarea, index) {
   );
   // Validación si la tarea tiene filtro, entonces agregar el elmento hijo al padre
   if (tarea.filtro) {
-    divContenedorFechaFiltro.appendChild(divFiltroImagenTarea);
-  }
-  // Validación si el div que contiene los div que une imagen + texto esta vacio o no, para unir el elemento hijo al padre
-  if (divContenedorFechaFiltro.children.length > 0) {
-    contenedorTarea.appendChild(divContenedorFechaFiltro);
+    contenedorTarea.appendChild(divFiltroImagenTarea);
   }
   // Crea el div donde van a estar los botones de completar y editar, y se les asigna una clase de css
   const divBotones = document.createElement("div");
@@ -133,103 +127,7 @@ function crearElementoConIcono(src, texto, claseTexto) {
   div.appendChild(texto);
   return div;
 }
-//Función para personalizar el formato de la fecha
-function nuevoFormatoFechaTarea(fecha) {
-  const [anioSeleccionado, mesSeleccionado, diaSeleccionado] = fecha
-    .split("-")
-    .map(Number);
 
-  const fechaActual = new Date();
-  const anioActual = fechaActual.getFullYear();
-  const mesActual = fechaActual.getMonth() + 1;
-  const diaActual = fechaActual.getDate();
-
-  // Crear fecha en hora local para evitar desfase
-  const fechaSeleccionada = new Date(
-    anioSeleccionado,
-    mesSeleccionado - 1,
-    diaSeleccionado
-  );
-
-  let idioma = "es-ES";
-  let opciones = {};
-  let textoFecha = "";
-
-  // Función para obtener número de semana ISO
-  function getWeekNumber(date) {
-    const tmp = new Date(
-      Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
-    );
-    const diaSemana = tmp.getUTCDay() || 7;
-    tmp.setUTCDate(tmp.getUTCDate() + 4 - diaSemana);
-    const inicioAno = new Date(Date.UTC(tmp.getUTCFullYear(), 0, 1));
-    return Math.ceil(((tmp - inicioAno) / 86400000 + 1) / 7);
-  }
-
-  // Mismo mes y año
-  if (mesSeleccionado === mesActual && anioSeleccionado === anioActual) {
-    if (diaSeleccionado === diaActual) {
-      return "Hoy";
-    } else if (diaSeleccionado === diaActual + 1) {
-      return "Mañana";
-    } else {
-      // Comparar semana
-      if (getWeekNumber(fechaSeleccionada) === getWeekNumber(fechaActual)) {
-        opciones = { weekday: "long" }; // Solo el día de la semana
-        textoFecha = fechaSeleccionada.toLocaleDateString(idioma, opciones);
-      } else {
-        idioma = "en-US";
-        opciones = { month: "short", day: "numeric" }; // Mes + día numérico
-        textoFecha = fechaSeleccionada
-          .toLocaleDateString(idioma, opciones)
-          .replace(",", "")
-          .replace(".", "");
-      }
-    }
-  }
-  // Mismo año, distinto mes
-  else if (anioSeleccionado === anioActual) {
-    idioma = "en-US";
-    opciones = { month: "short", day: "numeric" };
-    textoFecha = fechaSeleccionada
-      .toLocaleDateString(idioma, opciones)
-      .replace(",", "")
-      .replace(".", "");
-  }
-  // Distinto año
-  else {
-    idioma = "en-US";
-    opciones = { month: "short", day: "numeric", year: "numeric" };
-    textoFecha = fechaSeleccionada
-      .toLocaleDateString(idioma, opciones)
-      .replace(",", "")
-      .replace(".", "");
-  }
-  // Mayúscula inicial
-  return textoFecha.charAt(0).toUpperCase() + textoFecha.slice(1);
-}
-// Función que dependiendo del retorno de la función nuevoFormatoFechaTarea, me dara un color para el p u otro
-function colorFechaMostrar(textoFecha) {
-  const p = document.createElement("p");
-  p.textContent = textoFecha;
-  if (textoFecha === "Hoy") {
-    p.className = "claseHoy";
-  } else if (textoFecha === "Mañana") {
-    p.className = "claseMañana";
-  } else if (
-    textoFecha === "Lunes" ||
-    textoFecha === "Martes" ||
-    textoFecha === "Miercoles" ||
-    textoFecha === "Jueves" ||
-    textoFecha === "Sabado" ||
-    textoFecha === "Domingo"
-  ) {
-    p.className = "claseDiaSemana";
-  } else {
-    p.className = "fechaTarea";
-  }
-  return p;
-}
 // Función para crear el boton de completar, crea el elemento y además la función del botón
 function crearBotonCompletar(index, nombreFiltro) {
   const BotonCompletado = document.createElement("input");
@@ -250,7 +148,7 @@ function crearBotonCompletar(index, nombreFiltro) {
     // Actualizo el arreglo tareas en el LocalStorage
     localStorage.setItem("tareas", JSON.stringify(tareas));
     // Volver a mostrar lista actualizada, el tareas llamado es el array que esta fuera, este tareas es el que esta definido al principio del codigo
-    mostrarTareas(tareas);
+    mostrarTareasHoy(tareas);
   });
 
   const tipoFiltro = nombreFiltro.textContent;
@@ -280,7 +178,9 @@ function crearBotonEditar(tarea, index) {
     //mostar el formulario de editar
     formularioEditar.classList.remove("oculto");
     // Asigno al indice Editando el index que viene de cuando hacemos click al boton de editar, para ocuparlo en otra función, este viende de la funcion MostrarLista -> CrearElementoLista
+    console.log("index recibido en el boton editar " + index)
     indiceEditando = index;
+    console.log("indice editando valor asignado: " + indiceEditando)
     // Le asigno al input del formulario Editar el nombre de la tarea que seleccione para editar, y esa tarea viene del objeto que se le paso a esta funcion
     document.getElementById("nombreTareaEditar").value = tarea.name;
     document.getElementById("descripcionTareaEditar").value = tarea.descripcion;
@@ -290,6 +190,7 @@ function crearBotonEditar(tarea, index) {
   });
   return imagenBotonEditar;
 }
+
 // Función que se activa cuando se da click en el boton de cancelar en el formulario de editar una tarea
 function cancelarEdicion() {
   formularioEditar.classList.add("oculto");
@@ -299,11 +200,14 @@ function cancelarEdicion() {
 // Función que guarda la Tarea que se ha editado
 function guardarTareaEditada(event) {
   event.preventDefault();
+  console.log(indiceEditando)
   if (indiceEditando !== null) {
     //guardar el nuevo nombre de la tarea
     const nombreTareaEditado =
       document.getElementById("nombreTareaEditar").value;
+   
     tareas[indiceEditando].name = nombreTareaEditado;
+    console.log(tareas[indiceEditando].name)
     // Guardar la nueva descripción de la tarea
     const descripcionTareaEditar = document.getElementById(
       "descripcionTareaEditar"
@@ -320,82 +224,49 @@ function guardarTareaEditada(event) {
     formularioEditar.classList.add("oculto");
     // Como se acaba de editar un objeto del arreglo tareas, lo envio de nuevo al LocalStorage para que se actualice
     localStorage.setItem("tareas", JSON.stringify(tareas));
-    mostrarTareas(tareas); // Vuelvo a mostrar la lista actualizada
+    mostrarTareasHoy(tareas); // Vuelvo a mostrar la lista actualizada
     indiceEditando = null; // Como ya se edito, volver a dejar el indice del arreglo null para otras ediciones
   }
 }
 
-// Logico de ocultar y mostrar elementos de la interfaz
 const formularioEditar = document.getElementById("fondoOscuroEditar");
-const bandejaEntrada = document.getElementById("bandeja");
-const h1bandejaEntrada = document.getElementById("h1bandejaEntrada");
-
 formularioEditar.classList.add("oculto");
-h1bandejaEntrada.classList.add("oculto");
 
-// Verificación inicial, por si hay tareas en el LocalStorage
-if (tareas.length !== 0) {
-  document.addEventListener("DOMContentLoaded", () => mostrarTareas(tareas));
-  bandejaEntrada.classList.add("oculto");
-  formularioEditar.classList.add("oculto");
-} else {
-  bandejaEntrada.classList.remove("oculto");
-}
-
-// Select para editar
-const selectFiltroEditar = document.getElementById("opcionesFiltrosEditar");
+// Lógica de mostrar los filtros en los formularios tanto de crear una nueva tarea como de editarla
+const selectFiltroEditarFormularioTareasHoy = document.getElementById("opcionesFiltrosEditar");
 
 var arregloFiltros = JSON.parse(localStorage.getItem("filtros")) || [];
 
 arregloFiltros.forEach(function (filtro) {
-  const opcion = document.createElement("option");
-
-  // El value se guarda limpio (solo el nombre)
-  opcion.value = filtro.nombre;
-
-  // El texto mostrado lleva emoji
-  switch (filtro.nombre) {
-    case "Prioridad 1":
-      opcion.textContent = "🔴 " + filtro.nombre;
-      break;
-    case "Prioridad 2":
-      opcion.textContent = "🟠 " + filtro.nombre;
-      break;
-    case "Prioridad 3":
-      opcion.textContent = "🔵 " + filtro.nombre;
-      break;
-    case "Prioridad 4":
-      opcion.textContent = "🟢 " + filtro.nombre;
-      break;
-    default:
-      opcion.textContent = filtro.nombre;
+  // Función para devolver el texto con emoji
+  function getTextoConEmoji(nombre) {
+    switch (nombre) {
+      case "Prioridad 1":
+        return "🔴 " + nombre;
+      case "Prioridad 2":
+        return "🟠 " + nombre;
+      case "Prioridad 3":
+        return "🔵 " + nombre;
+      case "Prioridad 4":
+        return "🟢 " + nombre;
+      default:
+        return nombre;
+    }
   }
 
-  selectFiltroEditar.appendChild(opcion);
-});
 
-document.addEventListener("DOMContentLoaded", function () {
-  // Recuperar el filtro seleccionado del localStorage
-  const filtroSeleccionado = localStorage.getItem("filtroSeleccionado");
-
-  // Recuperar todas las tareas del localStorage
-  const tareas = JSON.parse(localStorage.getItem("tareas")) || [];
-
-  // Filtrar las tareas que pertenecen al filtro seleccionado
-  const tareasFiltradas = tareas.filter((t) => t.filtro === filtroSeleccionado);
-
-  // Mostrar el nombre del filtro actual
-  document.getElementById("h1bandejaEntrada").textContent = filtroSeleccionado;
-
-  // Mostrar las tareas filtradas
-  mostrarTareas(tareasFiltradas);
+  // --- Para el select de editar ---
+  const opcionFiltrosEditarTarea = document.createElement("option");
+  opcionFiltrosEditarTarea.value = filtro.nombre; // limpio
+  opcionFiltrosEditarTarea.textContent = getTextoConEmoji(filtro.nombre);
+  selectFiltroEditarFormularioTareasHoy.appendChild(opcionFiltrosEditarTarea);
 });
 
 // ---------------------------------------- AÑADIR TAREA DESDE EL MENÚ ----------------------------------------------------------
 
 // Lógica de mostrar los filtros
 // Select para editar
-const selectFiltrosNuevaTareaMenu = document.getElementById(
+const selectFiltroEditar = document.getElementById(
   "opcionesFiltrosNuevaTareaMenu"
 );
 
@@ -425,7 +296,7 @@ arregloFiltros.forEach(function (filtro) {
       opcion.textContent = filtro.nombre;
   }
 
-  selectFiltrosNuevaTareaMenu.appendChild(opcion);
+  selectFiltroEditar.appendChild(opcion);
 });
 
 const formulatioAñadirTareaMenu = document.getElementById(
@@ -468,7 +339,6 @@ function agregarNuevaTareaMenu(event) {
   event.preventDefault();
   // Obtengo el valor del nombre de la tarea
   const nombreTarea = document.getElementById("nombreTareaMenu").value;
-
   // Obtengo el valor de decripción de la tarea
   const descripcionTarea = document.getElementById(
     "descripcionTareaMenu"
@@ -509,7 +379,9 @@ class Tarea {
 // Crea un arreglo tareas con los datos almacenados en la clave "tareas" del localStorage
 var tareas = JSON.parse(localStorage.getItem("tareas")) || [];
 
-// ✅ Validación de que la tarea tenga al menos el nombre antes agregar
+
+
+// ---------------------------✅ Validación de que la tarea tenga al menos el nombre antes agregar-------------------
 const inputNombreTareaMenu = document.getElementById("nombreTareaMenu");
 const btnAñadirNuevaTareaMenu = document.getElementById("nuevaTareaMenu");
 const formularioAñadirTareaMenu = document.querySelector(

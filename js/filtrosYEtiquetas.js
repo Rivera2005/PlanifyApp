@@ -451,3 +451,19 @@ formularioEditarFiltroValidación.addEventListener("submit", function (e) {
   if (btnGuardarFiltroEditado.disabled) return; // seguridad extra
   guardarFiltroEditado();
 });
+
+//-------- Parte del codigo que sirve como validación para la fecha, solo fecha actual-----------
+// Obtener la fecha de hoy en formato YYYY-MM-DD
+const hoy = new Date();
+const yyyy = hoy.getFullYear();
+const mm = String(hoy.getMonth() + 1).padStart(2, "0");
+const dd = String(hoy.getDate()).padStart(2, "0");
+const fechaHoy = `${yyyy}-${mm}-${dd}`;
+
+// Seleccionar todos los input[type="date"]
+const inputsFecha = document.querySelectorAll('input[type="date"]');
+
+// Asignar min a cada uno
+inputsFecha.forEach((input) => {
+  input.min = fechaHoy;
+});

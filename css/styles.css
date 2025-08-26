@@ -521,3 +521,9 @@ input[type="radio"] {
     pointer-events: none;
     cursor: not-allowed;
 }
+
+.claseVencida {
+  color: red;
+  font-weight: bold;
+  text-decoration: line-through;
+}

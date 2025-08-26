@@ -1,23 +1,5 @@
-// Clase del objeto tarea
-class Tarea {
-  constructor(name, descripcion, fecha, filtro) {
-    this.name = name;
-    this.descripcion = descripcion;
-    this.fecha = fecha;
-    this.filtro = filtro;
-  }
-}
-// Crea un arreglo tareas con los datos almacenados en la clave "tareas" del localStorage
-var tareas = JSON.parse(localStorage.getItem("tareas")) || [];
-// Crear un arreglo de las tareas completadas con los datos en la clave "tareasCompletadas" del localStorage
-var tareasCompletadasArreglo =
-  JSON.parse(localStorage.getItem("tareasCompletadas")) || [];
 // indice del array que quiero editar
 let indiceEditando = null;
-// Obtengo el evento de agregar una nueva tarea que es el boton de la bandeja de entrada
-document
-  .getElementById("nuevaTarea")
-  .addEventListener("click", agregarNuevaTarea);
 // Captura el evento para guardar una tarea que fue editada
 document
   .getElementById("guardarTarea")
@@ -27,70 +9,47 @@ document
   .getElementById("desaparecerFormularioEditar")
   .addEventListener("click", cancelarEdicion);
 
-// Función para agregar una nueva tarea, recolecta los datos de los input
-// Crear un objeto con los datos recolectados y los agregar al arreglo tareas
-// Por ultimo envia al arreglo al localStorage con la clave "tareas"
-function agregarNuevaTarea(event) {
+// Captura el evento de cargar el DOM y llama a la función que mostrará las tareas Vencidas
+document.addEventListener("DOMContentLoaded", tareasVencidas);
+
+// Crear un arreglo de las tareas completadas con los datos en la clave "tareasCompletadas" del localStorage
+var tareasCompletadasArreglo =
+  JSON.parse(localStorage.getItem("tareasCompletadas")) || [];
+
+// Función que se llama al cargar el DOM que filtra las tareas del día HOY
+function tareasVencidas(event) {
   event.preventDefault();
-  // Obtengo el valor del nombre de la tarea
-  const nombreTarea = document.getElementById("nombreTarea").value;
-  // Obtengo el valor de decripción de la tarea
-  const descripcionTarea = document.getElementById("descripcionTarea").value;
-  // Obtengo el valor de la fecha de la tarea
-  const fechaTarea = document.getElementById("fechaTarea").value;
-  // Obtengo el valor del nombre del filtro aplicado
-  const nombreFiltro = document.getElementById("opcionesFiltros").value;
-  // Creando un objeto Tarea con sus valores que requiere
-  const tarea = new Tarea(
-    nombreTarea,
-    descripcionTarea,
-    fechaTarea,
-    nombreFiltro
+  const tareas = JSON.parse(localStorage.getItem("tareas")) || [];
+  mostrarTareasHoy(tareas);
+}
+
+// Función que muestra solo las tareas vencidas
+function mostrarTareasHoy(arregloTareas) {
+  const listaTareasVencidas = document.getElementById("listaTareasVencidas");
+  listaTareasVencidas.innerHTML = ""; // Limpiar lista antes de mostrar
+
+  // Obtener fecha de HOY en formato YYYY-MM-DD
+  const hoy = new Date();
+  const fechaHoy = `${hoy.getFullYear()}-${(hoy.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}-${hoy.getDate().toString().padStart(2, "0")}`;
+
+  // Filtrar tareas cuya fecha === hoy
+  const tareasVencidas = arregloTareas.filter(
+    (tarea) => tarea.fecha < fechaHoy
   );
-  // Agrego la nueva tarea(objeto) al arreglo tareas
-  tareas.push(tarea);
-  // Envio el arreglo tareas al localStorage con clave "tareas"
-  localStorage.setItem("tareas", JSON.stringify(tareas));
-  // Llamo a la faunción para limipiar el formulario de Nueva Tarea
-  limpiarFormularioNuevaTarea();
-  // LLamo a la función mostrar tareas y le paso el arreglo tareas que contiene la tarea(objeto)
-  mostrarTareas(tareas);
-  h1bandejaEntrada.classList.remove("oculto");
-  // Llamo a la función que me permite hacer la validación antes de agregar una nueva tarea
-  actualizarEstadoBoton();
-}
 
-//Función para limpiar los input del formulario de Nueva Tarea
-function limpiarFormularioNuevaTarea() {
-  document.getElementById("nombreTarea").value = "";
-  document.getElementById("descripcionTarea").value = "";
-  document.getElementById("fechaTarea").value = "";
-  document.getElementById("opcionesFiltros").value = "";
-}
-
-// Función para mostrar las tareas en la interfaz
-// Creo un elemento con create element y lo paso al padre que es listaTareas que es un UL en el HTML
-function mostrarTareas(arregloTareas) {
-  const listaTareas = document.getElementById("listaTareas");
-  listaTareas.innerHTML = ""; // Limpiar lista antes de mostrar
-  //Recorro cada elemento del arreglo, los parametros function(tarea, index)
-  // tarea es cada elemento dentro del arreglo, y el index es la posición del elemento en el arreglo
-  arregloTareas.forEach(function (tarea, index) {
-    listaTareas.appendChild(crearElementoTarea(tarea, index));
-  });
-  // Actualizar la interfaz si esta vacio o si no esta vacio el arreglo de lista de tareas
-  if (!arregloTareas.length) {
-    bandejaEntrada.classList.remove("oculto");
-    h1bandejaEntrada.classList.add("oculto");
-    añadirtareaoculto.classList.add("oculto");
-    formulario.classList.add("oculto");
-  } else {
-    bandejaEntrada.classList.add("oculto");
-    h1bandejaEntrada.classList.remove("oculto");
-    if (formulario.classList.contains("oculto")) {
-      añadirtareaoculto.classList.remove("oculto");
-    }
+  if (tareasVencidas.length === 0) {
+    const mensaje = document.createElement("p");
+    mensaje.textContent = "No hay tareas vencidas";
+    mensaje.className = "mensajeVacio";
+    listaTareasVencidas.appendChild(mensaje);
+    return;
   }
+
+  tareasVencidas.forEach((tarea, index) => {
+    listaTareasVencidas.appendChild(crearElementoTarea(tarea, index));
+  });
 }
 
 // Función para crear el Elemento Tarea que es li con los botones
@@ -329,7 +288,6 @@ function colorFechaMostrar(textoFecha, fechaOriginal) {
 
   return p;
 }
-
 // Función para crear el boton de completar, crea el elemento y además la función del botón
 function crearBotonCompletar(index, nombreFiltro) {
   const BotonCompletado = document.createElement("input");
@@ -350,7 +308,7 @@ function crearBotonCompletar(index, nombreFiltro) {
     // Actualizo el arreglo tareas en el LocalStorage
     localStorage.setItem("tareas", JSON.stringify(tareas));
     // Volver a mostrar lista actualizada, el tareas llamado es el array que esta fuera, este tareas es el que esta definido al principio del codigo
-    mostrarTareas(tareas);
+    mostrarTareasHoy(tareas);
   });
 
   const tipoFiltro = nombreFiltro.textContent;
@@ -380,7 +338,9 @@ function crearBotonEditar(tarea, index) {
     //mostar el formulario de editar
     formularioEditar.classList.remove("oculto");
     // Asigno al indice Editando el index que viene de cuando hacemos click al boton de editar, para ocuparlo en otra función, este viende de la funcion MostrarLista -> CrearElementoLista
+    console.log("index recibido en el boton editar " + index);
     indiceEditando = index;
+    console.log("indice editando valor asignado: " + indiceEditando);
     // Le asigno al input del formulario Editar el nombre de la tarea que seleccione para editar, y esa tarea viene del objeto que se le paso a esta funcion
     document.getElementById("nombreTareaEditar").value = tarea.name;
     document.getElementById("descripcionTareaEditar").value = tarea.descripcion;
@@ -400,11 +360,14 @@ function cancelarEdicion() {
 // Función que guarda la Tarea que se ha editado
 function guardarTareaEditada(event) {
   event.preventDefault();
+  console.log(indiceEditando);
   if (indiceEditando !== null) {
     //guardar el nuevo nombre de la tarea
     const nombreTareaEditado =
       document.getElementById("nombreTareaEditar").value;
+
     tareas[indiceEditando].name = nombreTareaEditado;
+    console.log(tareas[indiceEditando].name);
     // Guardar la nueva descripción de la tarea
     const descripcionTareaEditar = document.getElementById(
       "descripcionTareaEditar"
@@ -421,76 +384,18 @@ function guardarTareaEditada(event) {
     formularioEditar.classList.add("oculto");
     // Como se acaba de editar un objeto del arreglo tareas, lo envio de nuevo al LocalStorage para que se actualice
     localStorage.setItem("tareas", JSON.stringify(tareas));
-    mostrarTareas(tareas); // Vuelvo a mostrar la lista actualizada
+    mostrarTareasHoy(tareas); // Vuelvo a mostrar la lista actualizada
     indiceEditando = null; // Como ya se edito, volver a dejar el indice del arreglo null para otras ediciones
   }
 }
 
-// Logico de ocultar y mostrar elementos de la interfaz
-const formulario = document.getElementById("formulario-tareas");
 const formularioEditar = document.getElementById("fondoOscuroEditar");
-const bandejaEntrada = document.getElementById("bandeja");
-const h1bandejaEntrada = document.getElementById("h1bandejaEntrada");
-const añadirtareaoculto = document.getElementById("añadirtareaoculto");
-
-formulario.classList.add("oculto");
 formularioEditar.classList.add("oculto");
-h1bandejaEntrada.classList.add("oculto");
-añadirtareaoculto.classList.add("oculto");
-
-// capturo el evento del boton añadir tarea que esta debajo de bandeja de entrada (cuando no hay tareas almacenadas)
-document
-  .getElementById("aparecerFormulario")
-  .addEventListener("click", function () {
-    bandejaEntrada.classList.add("oculto");
-    formulario.classList.remove("oculto");
-  });
-
-// Capturo el evento del boton cancelar del formulario para añadir una nueva tarea
-document
-  .getElementById("desaparecerFormulario")
-  .addEventListener("click", function () {
-    formulario.classList.add("oculto");
-    limpiarFormularioNuevaTarea();
-    if (!tareas.length) {
-      bandejaEntrada.classList.remove("oculto");
-    } else {
-      añadirtareaoculto.classList.remove("oculto");
-    }
-  });
-
-// Capturo el evento del boton añadir tarea que aparece al finalizar la lista de tareas
-document
-  .getElementById("añadirtareaoculto")
-  .addEventListener("click", function () {
-    formulario.classList.remove("oculto");
-    // Llamado a la función que me ayuda con la validación al momento de crear una nueva tarea
-    actualizarEstadoBoton();
-    añadirtareaoculto.classList.add("oculto");
-  });
-
-// Capturo el evento del añadirTarea que esta en el menu
-document
-  .getElementById("iconoañadirTarea")
-  .addEventListener("click", function () {
-    formulario.classList.remove("oculto");
-    bandejaEntrada.classList.add("oculto");
-  });
-
-// Verificación inicial, por si hay tareas en el LocalStorage
-if (tareas.length !== 0) {
-  document.addEventListener("DOMContentLoaded", () => mostrarTareas(tareas));
-  bandejaEntrada.classList.add("oculto");
-  formulario.classList.add("oculto");
-  formularioEditar.classList.add("oculto");
-  añadirtareaoculto.classList.add("oculto");
-} else {
-  bandejaEntrada.classList.remove("oculto");
-}
 
 // Lógica de mostrar los filtros en los formularios tanto de crear una nueva tarea como de editarla
-const selectFiltro = document.getElementById("opcionesFiltros");
-const selectFiltroEditar = document.getElementById("opcionesFiltrosEditar");
+const selectFiltroEditarFormularioTareasHoy = document.getElementById(
+  "opcionesFiltrosEditar"
+);
 
 var arregloFiltros = JSON.parse(localStorage.getItem("filtros")) || [];
 
@@ -511,18 +416,157 @@ arregloFiltros.forEach(function (filtro) {
     }
   }
 
-  // --- Para el select de nueva tarea ---
-  const opcionFiltrosNuevaTarea = document.createElement("option");
-  opcionFiltrosNuevaTarea.value = filtro.nombre; // limpio
-  opcionFiltrosNuevaTarea.textContent = getTextoConEmoji(filtro.nombre);
-  selectFiltro.appendChild(opcionFiltrosNuevaTarea);
-
   // --- Para el select de editar ---
   const opcionFiltrosEditarTarea = document.createElement("option");
   opcionFiltrosEditarTarea.value = filtro.nombre; // limpio
   opcionFiltrosEditarTarea.textContent = getTextoConEmoji(filtro.nombre);
-  selectFiltroEditar.appendChild(opcionFiltrosEditarTarea);
+  selectFiltroEditarFormularioTareasHoy.appendChild(opcionFiltrosEditarTarea);
 });
+
+// ---------------------------------------- AÑADIR TAREA DESDE EL MENÚ ----------------------------------------------------------
+
+// Lógica de mostrar los filtros
+// Select para editar
+const selectFiltroEditar = document.getElementById(
+  "opcionesFiltrosNuevaTareaMenu"
+);
+
+var arregloFiltros = JSON.parse(localStorage.getItem("filtros")) || [];
+
+arregloFiltros.forEach(function (filtro) {
+  const opcion = document.createElement("option");
+
+  // El value se guarda limpio (solo el nombre)
+  opcion.value = filtro.nombre;
+
+  // El texto mostrado lleva emoji
+  switch (filtro.nombre) {
+    case "Prioridad 1":
+      opcion.textContent = "🔴 " + filtro.nombre;
+      break;
+    case "Prioridad 2":
+      opcion.textContent = "🟠 " + filtro.nombre;
+      break;
+    case "Prioridad 3":
+      opcion.textContent = "🔵 " + filtro.nombre;
+      break;
+    case "Prioridad 4":
+      opcion.textContent = "🟢 " + filtro.nombre;
+      break;
+    default:
+      opcion.textContent = filtro.nombre;
+  }
+
+  selectFiltroEditar.appendChild(opcion);
+});
+
+const formulatioAñadirTareaMenu = document.getElementById(
+  "formulario-tareas-menu"
+);
+
+formulatioAñadirTareaMenu.classList.add("oculto");
+
+// Capturo el evento del añadirTarea que esta en el menu
+document
+  .getElementById("iconoañadirTarea")
+  .addEventListener("click", function () {
+    formulatioAñadirTareaMenu.classList.remove("oculto");
+  });
+
+// Capturo el evento del boton cancelar del formulario para añadir una nueva tarea desde el menu
+document
+  .getElementById("desaparecerFormularioAñadirTareaMenu")
+  .addEventListener("click", function () {
+    formulatioAñadirTareaMenu.classList.add("oculto");
+    limpiarFormularioNuevaTarea();
+  });
+
+//Función para limpiar los input del formulario de Nueva Tarea del menu
+function limpiarFormularioNuevaTarea() {
+  document.getElementById("nombreTareaMenu").value = "";
+  document.getElementById("descripcionTareaMenu").value = "";
+  document.getElementById("fechaTareaMenu").value = "";
+}
+
+// Obtengo el evento de agregar una nueva tarea que es el boton de añadir pero del formulario que se despliega desde el menú
+document
+  .getElementById("nuevaTareaMenu")
+  .addEventListener("click", agregarNuevaTareaMenu);
+
+// Función para agregar una nueva tarea, recolecta los datos de los input
+// Crear un objeto con los datos recolectados y los agregar al arreglo tareas
+// Por ultimo envia al arreglo al localStorage con la clave "tareas"
+function agregarNuevaTareaMenu(event) {
+  event.preventDefault();
+  // Obtengo el valor del nombre de la tarea
+  const nombreTarea = document.getElementById("nombreTareaMenu").value;
+  // Obtengo el valor de decripción de la tarea
+  const descripcionTarea = document.getElementById(
+    "descripcionTareaMenu"
+  ).value;
+  // Obtengo el valor de la fecha de la tarea
+  const fechaTarea = document.getElementById("fechaTareaMenu").value;
+  // Obtengo el valor del nombre del filtro aplicado
+  const nombreFiltro = document.getElementById(
+    "opcionesFiltrosNuevaTareaMenu"
+  ).value;
+  // Creando un objeto Tarea con sus valores que requiere
+  const tarea = new Tarea(
+    nombreTarea,
+    descripcionTarea,
+    fechaTarea,
+    nombreFiltro
+  );
+  // Agrego la nueva tarea(objeto) al arreglo tareas
+  tareas.push(tarea);
+  // Envio el arreglo tareas al localStorage con clave "tareas"
+  localStorage.setItem("tareas", JSON.stringify(tareas));
+  // Llamo a la faunción para limipiar el formulario de Nueva Tarea
+  limpiarFormularioNuevaTarea();
+  //Llamo a la función para desaparecer el formulario
+  formulatioAñadirTareaMenu.classList.add("oculto");
+}
+
+// Clase del objeto tarea
+class Tarea {
+  constructor(name, descripcion, fecha, filtro) {
+    this.name = name;
+    this.descripcion = descripcion;
+    this.fecha = fecha;
+    this.filtro = filtro;
+  }
+}
+
+// Crea un arreglo tareas con los datos almacenados en la clave "tareas" del localStorage
+var tareas = JSON.parse(localStorage.getItem("tareas")) || [];
+
+// ---------------------------✅ Validación de que la tarea tenga al menos el nombre antes agregar-------------------
+const inputNombreTareaMenu = document.getElementById("nombreTareaMenu");
+const btnAñadirNuevaTareaMenu = document.getElementById("nuevaTareaMenu");
+const formularioAñadirTareaMenu = document.querySelector(
+  "#formulario-tareas-menu form"
+);
+
+// función para activar/desactivar el botón
+function actualizarEstadoBoton() {
+  const vacio = inputNombreTareaMenu.value.trim() === "";
+  btnAñadirNuevaTareaMenu.disabled = vacio;
+  btnAñadirNuevaTareaMenu.classList.toggle("deshabilitado", vacio);
+}
+
+// Inicializar estado al cargar
+actualizarEstadoBoton();
+
+// escuchar input
+inputNombreTareaMenu.addEventListener("input", actualizarEstadoBoton);
+
+// interceptar envío del form
+formularioAñadirTareaMenu.addEventListener("submit", function (e) {
+  e.preventDefault();
+  if (btnAñadirNuevaTareaMenu.disabled) return; // seguridad extra
+  agregarNuevaTareaMenu();
+});
+
 
 //-------- Parte del codigo que sirve como validación para la fecha, solo fecha actual-----------
 // Obtener la fecha de hoy en formato YYYY-MM-DD
@@ -538,59 +582,4 @@ const inputsFecha = document.querySelectorAll('input[type="date"]');
 // Asignar min a cada uno
 inputsFecha.forEach((input) => {
   input.min = fechaHoy;
-});
-
-// -------------------------✅ Validación de que la tarea tenga al menos el nombre antes agregar---------------------------
-const inputNombreTarea = document.getElementById("nombreTarea");
-const btnAñadirNuevaTarea = document.getElementById("nuevaTarea");
-const formularioAñadirTarea = document.querySelector("#formulario-tareas form");
-
-// función para activar/desactivar el botón
-function actualizarEstadoBoton() {
-  const vacio = inputNombreTarea.value.trim() === "";
-  btnAñadirNuevaTarea.disabled = vacio;
-  btnAñadirNuevaTarea.classList.toggle("deshabilitado", vacio);
-}
-
-// Inicializar estado al cargar
-actualizarEstadoBoton();
-
-// escuchar input
-inputNombreTarea.addEventListener("input", actualizarEstadoBoton);
-
-// interceptar envío del form
-formularioAñadirTarea.addEventListener("submit", function (e) {
-  e.preventDefault();
-  if (btnAñadirNuevaTarea.disabled) return; // seguridad extra
-  agregarNuevaTarea();
-});
-
-// -------------------------✅ Validación de que la tarea tenga al menos el nombre antes EDITAR-------------------------
-const inputNombreTareaEditar = document.getElementById("nombreTareaEditar");
-const btnGuardarTareaEditada = document.getElementById("guardarTarea");
-const formularioEditarTareaValidación = document.querySelector(
-  "#formulario-tareas-editar form"
-);
-
-// función para activar/desactivar el botón
-function actualizarEstadoBotonEditarTarea() {
-  const vacio = inputNombreTareaEditar.value.trim() === "";
-  btnGuardarTareaEditada.disabled = vacio;
-  btnGuardarTareaEditada.classList.toggle("deshabilitado", vacio);
-}
-
-// Inicializar estado al cargar
-actualizarEstadoBotonEditarTarea();
-
-// escuchar input
-inputNombreTareaEditar.addEventListener(
-  "input",
-  actualizarEstadoBotonEditarTarea
-);
-
-// interceptar envío del form
-formularioEditarTareaValidación.addEventListener("submit", function (e) {
-  e.preventDefault();
-  if (btnGuardarTareaEditada.disabled) return; // seguridad extra
-  guardarTareaEditada();
 });

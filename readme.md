@@ -21,10 +21,7 @@ Con una interfaz intuitiva y herramientas flexibles, podrás gestionar tus pendi
 - 🌙 Modo oscuro.  
 - 📊 Estadísticas de productividad.  
 - ☁️ Sincronización en la nube. 
-- Clasificar las tareas de Hoy (fecha actual)
-- Clasidicar las tareas Proximas (realizar un calendarii)
-- Clasificar las tareas qeu han vencido 
-
+- Clasificar las tareas Proximas (realizar un calendario)
 ---
 
 ## 🛠️ Tecnologías utilizadas
